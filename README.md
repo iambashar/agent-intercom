@@ -7,6 +7,7 @@
 [![npm](https://img.shields.io/npm/v/agent-intercom?style=for-the-badge&logo=npm&color=cb3837&label=npx%20agent-intercom)](https://www.npmjs.com/package/agent-intercom)
 [![CI](https://img.shields.io/github/actions/workflow/status/iambashar/agent-intercom/ci.yml?style=for-the-badge&logo=githubactions&logoColor=white&label=tests)](https://github.com/iambashar/agent-intercom/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F5C451?style=for-the-badge)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/iambashar/agent-intercom?style=for-the-badge&logo=github&color=F0A93B&label=%E2%AD%90%20stars)](https://github.com/iambashar/agent-intercom/stargazers)
 
 [![Node 20+](https://img.shields.io/badge/node-%E2%89%A520-339933?style=flat-square&logo=nodedotjs&logoColor=white)](package.json)
 [![Zero dependencies](https://img.shields.io/badge/dependencies-0-19C37D?style=flat-square)](package.json)
@@ -17,6 +18,8 @@
 
 **Let Claude Code, Codex CLI and Antigravity (Gemini) message each other,**<br>
 **and land each message straight in the other agent's open session.**
+
+<sub>If it saves you time, a ⭐ helps other people find it.</sub>
 
 [Get started](#get-started) · [See it work](#see-it-work) · [How push works](#how-push-works) · [Across machines](#across-machines) · [CLI](#cli) · [Security](#security) · [Contributing](#contributing)
 
@@ -203,6 +206,8 @@ This is a local mailbox with no authentication. Any process running as you can w
 
 See [SECURITY.md](SECURITY.md) to report a problem. Set `AGENT_MAIL_DIR` to move the mailbox, for example into a project folder.
 
+<p align="center"><a href="https://github.com/iambashar/agent-intercom"><img src="https://raw.githubusercontent.com/iambashar/agent-intercom/main/docs/assets/star.svg" alt="Saved you a copy-paste between agents? Star agent-intercom on GitHub" width="100%"></a></p>
+
 <a id="contributing"></a>
 
 ## 🤝 Contributing
@@ -224,6 +229,15 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Everyone 
 
 <a href="https://github.com/iambashar/agent-intercom/graphs/contributors"><img src="https://contrib.rocks/image?repo=iambashar/agent-intercom" alt="Contributors"></a>
 
+## ⭐ Star history
+
+<a href="https://star-history.com/#iambashar/agent-intercom&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=iambashar/agent-intercom&type=Date&theme=dark">
+    <img alt="Star history chart for agent-intercom" src="https://api.star-history.com/svg?repos=iambashar/agent-intercom&type=Date" width="100%">
+  </picture>
+</a>
+
 ## Develop
 
 ```bash
@@ -237,5 +251,7 @@ Zero runtime dependencies; Node 20+. See [CONTRIBUTING.md](CONTRIBUTING.md) and 
 <div align="center">
 
 **MIT licensed** · made for people who run more than one coding agent
+
+[⭐ Star](https://github.com/iambashar/agent-intercom) · [🐛 Report a bug](https://github.com/iambashar/agent-intercom/issues/new?template=bug_report.yml) · [💡 Discuss](https://github.com/iambashar/agent-intercom/discussions)
 
 </div>

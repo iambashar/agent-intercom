@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="230" viewBox="0 0 1280 230" role="img">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0B1020"/><stop offset="1" stop-color="#161D38"/></linearGradient>
+  <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="#ffffff" opacity="0.06"/></pattern>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE08A"/><stop offset="1" stop-color="#F0A93B"/></linearGradient>
+  <radialGradient id="glow"><stop offset="0" stop-color="#F5C451" stop-opacity="0.5"/><stop offset="1" stop-color="#F5C451" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1280" height="230" rx="24" fill="url(#bg)"/>
+<rect width="1280" height="230" rx="24" fill="url(#dots)"/>
+
+<g transform="translate(92,62)" opacity="0"><path d="M0,-9 Q1.98,-1.98 9,0 Q1.98,1.98 0,9 Q-1.98,1.98 -9,0 Q-1.98,-1.98 0,-9Z" fill="#FFE08A"/>
+  <animate attributeName="opacity" values="0;1;0" dur="2.4s" begin="0s" repeatCount="indefinite"/></g><g transform="translate(214,58)" opacity="0"><path d="M0,-7 Q1.54,-1.54 7,0 Q1.54,1.54 0,7 Q-1.54,1.54 -7,0 Q-1.54,-1.54 0,-7Z" fill="#FFE08A"/>
+  <animate attributeName="opacity" values="0;1;0" dur="2.4s" begin="0.8s" repeatCount="indefinite"/></g><g transform="translate(98,178)" opacity="0"><path d="M0,-7 Q1.54,-1.54 7,0 Q1.54,1.54 0,7 Q-1.54,1.54 -7,0 Q-1.54,-1.54 0,-7Z" fill="#FFE08A"/>
+  <animate attributeName="opacity" values="0;1;0" dur="2.4s" begin="1.6s" repeatCount="indefinite"/></g><g transform="translate(222,168)" opacity="0"><path d="M0,-10 Q2.2,-2.2 10,0 Q2.2,2.2 0,10 Q-2.2,2.2 -10,0 Q-2.2,-2.2 0,-10Z" fill="#FFE08A"/>
+  <animate attributeName="opacity" values="0;1;0" dur="2.4s" begin="0.4s" repeatCount="indefinite"/></g>
+<circle cx="156" cy="115" r="70" fill="url(#glow)"><animate attributeName="r" values="58;80;58" dur="2.4s" repeatCount="indefinite"/></circle>
+<g transform="translate(156,118)">
+  <polygon points="0.0,-44.0 11.2,-15.4 41.8,-13.6 18.1,5.9 25.9,35.6 0.0,19.0 -25.9,35.6 -18.1,5.9 -41.8,-13.6 -11.2,-15.4" fill="url(#gold)" stroke="#FFF1C2" stroke-width="2" stroke-linejoin="round">
+    <animateTransform attributeName="transform" type="scale" values="1;1.1;1" dur="2.4s" repeatCount="indefinite"/>
+  </polygon>
+</g>
+<text x="270" y="98" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="34" font-weight="800" fill="#E8ECF8">Saved you a copy-paste between agents?</text>
+<text x="270" y="140" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" fill="#9AA4C7">A star helps other people running Claude Code, Codex and Antigravity find it,</text>
+<text x="270" y="168" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" fill="#9AA4C7">and tells me which way to take it next.</text>
+<g transform="translate(1010,82)">
+  <rect width="210" height="64" rx="32" fill="url(#gold)"/>
+  <text x="105" y="41" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="22" font-weight="800" fill="#2A1B00">★  Star on GitHub</text>
+</g>
+
+</svg>

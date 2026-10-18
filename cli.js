@@ -205,6 +205,7 @@ switch (cmd) {
     if (!only || only === 'codex') installCodex(opt('--codex-name', 'codex'));
     if (!only || only === 'gemini') installGemini(opt('--gemini-name', 'gemini'));
     if (flag('--push')) pushInstall();
+    console.log('\nWorks for you? A star helps others find it: https://github.com/iambashar/agent-intercom');
     break;
   }
   case 'push':

@@ -307,5 +307,35 @@ def social():
     write('social-preview.svg', frame(W, H, body, title_defs, radius=0))
 
 
+# ---------------------------------------------------------------- star call-to-action
+def star_cta():
+    W, H = 1280, 230
+    defs = f'''<linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE08A"/><stop offset="1" stop-color="#F0A93B"/></linearGradient>
+  <radialGradient id="glow"><stop offset="0" stop-color="{HUB}" stop-opacity="0.5"/><stop offset="1" stop-color="{HUB}" stop-opacity="0"/></radialGradient>'''
+    # Five-point star centred on (0,0), radius 44.
+    import math
+    pts = ' '.join(f'{(44 if i % 2 == 0 else 19) * math.sin(i * math.pi / 5):.1f},{-(44 if i % 2 == 0 else 19) * math.cos(i * math.pi / 5):.1f}' for i in range(10))
+    sparkles = ''.join(f'''<g transform="translate({x},{y})" opacity="0">{star4(0, 0, r, '#FFE08A')}
+  <animate attributeName="opacity" values="0;1;0" dur="2.4s" begin="{b}s" repeatCount="indefinite"/></g>'''
+                       for x, y, r, b in [(92, 62, 9, 0), (214, 58, 7, 0.8), (98, 178, 7, 1.6), (222, 168, 10, 0.4)])
+    body = f'''
+{sparkles}
+<circle cx="156" cy="115" r="70" fill="url(#glow)"><animate attributeName="r" values="58;80;58" dur="2.4s" repeatCount="indefinite"/></circle>
+<g transform="translate(156,118)">
+  <polygon points="{pts}" fill="url(#gold)" stroke="#FFF1C2" stroke-width="2" stroke-linejoin="round">
+    <animateTransform attributeName="transform" type="scale" values="1;1.1;1" dur="2.4s" repeatCount="indefinite"/>
+  </polygon>
+</g>
+<text x="270" y="98" font-family="{SANS}" font-size="34" font-weight="800" fill="{INK}">Saved you a copy-paste between agents?</text>
+<text x="270" y="140" font-family="{SANS}" font-size="20" fill="{MUTED}">A star helps other people running Claude Code, Codex and Antigravity find it,</text>
+<text x="270" y="168" font-family="{SANS}" font-size="20" fill="{MUTED}">and tells me which way to take it next.</text>
+<g transform="translate(1010,82)">
+  <rect width="210" height="64" rx="32" fill="url(#gold)"/>
+  <text x="105" y="41" text-anchor="middle" font-family="{SANS}" font-size="22" font-weight="800" fill="#2A1B00">★  Star on GitHub</text>
+</g>
+'''
+    write('star.svg', frame(W, H, body, defs, radius=24))
+
+
 if __name__ == '__main__':
-    hero(); demo(); flow(); cards(); heading_icons(); social()
+    hero(); demo(); flow(); cards(); heading_icons(); social(); star_cta()
