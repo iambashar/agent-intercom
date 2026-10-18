@@ -92,3 +92,14 @@ test('mail_check skips a message the push daemon has claimed', async () => {
   assert.match((await b.call('mail_check')).content[0].text, /no new messages/);
   b.close();
 });
+
+test('mail_peers lists agent folders only', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-mail-'));
+  fs.mkdirSync(path.join(dir, 'bin'));
+  const a = client('a', dir);
+  await a.init();
+  const text = (await a.call('mail_peers')).content[0].text;
+  assert.match(text, /^a \(you\)/m);
+  assert.doesNotMatch(text, /^bin/m);
+  a.close();
+});

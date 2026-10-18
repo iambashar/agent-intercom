@@ -1,6 +1,6 @@
 {
   "name": "agent-mail",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Let Claude Code, Codex CLI and Antigravity (Gemini) message each other, with optional live push into open sessions. A zero-dependency MCP mailbox.",
   "bin": {
     "agent-mail": "cli.js"

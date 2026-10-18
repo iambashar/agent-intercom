@@ -136,8 +136,9 @@ test('leaves mail in the inbox when no live session can take it', async () => {
   const g = drop('gemini', 'nobody home');
   await scan('gemini');
   assert.ok(fs.existsSync(g.file), 'no agy session registered');
+  // A missing codex daemon means nobody to push to, not a failed push to retry.
   const c = drop('codex', 'no daemon');
-  await scan('codex');
+  await deliver('codex', c.file);
   assert.ok(fs.existsSync(c.file), 'codex daemon missing');
 });
 

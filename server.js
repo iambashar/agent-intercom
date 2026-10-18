@@ -69,11 +69,10 @@ function drain() {
   const files = fs.readdirSync(inbox).filter((f) => f.endsWith('.json')).sort();
   const msgs = [];
   for (const f of files) {
-    const p = path.join(inbox, f);
-    try {
-      msgs.push(JSON.parse(fs.readFileSync(p, 'utf8')));
-      fs.renameSync(p, path.join(dir(ME, 'read'), f));
-    } catch {}
+    // Rename first: whoever wins the rename (this or the push daemon's claim) is the one that delivers it.
+    const dest = path.join(dir(ME, 'read'), f);
+    try { fs.renameSync(path.join(inbox, f), dest); } catch { continue; }
+    try { msgs.push(JSON.parse(fs.readFileSync(dest, 'utf8'))); } catch {}
   }
   return msgs;
 }
@@ -93,7 +92,9 @@ async function check({ wait_seconds = 0 }) {
 }
 
 function peers() {
-  const rows = fs.readdirSync(ROOT, { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => {
+  // Only agent folders (they have an inbox); skips helpers like bin/.
+  const rows = fs.readdirSync(ROOT, { withFileTypes: true })
+    .filter((d) => d.isDirectory() && fs.existsSync(path.join(ROOT, d.name, 'inbox'))).map((d) => {
     const a = path.join(ROOT, d.name, 'alive');
     const t = fs.existsSync(a) ? new Date(Number(fs.readFileSync(a, 'utf8'))).toISOString() : 'never started';
     return `${d.name}${d.name === ME ? ' (you)' : ''} - last started ${t}`;
@@ -109,7 +110,7 @@ async function handle(req) {
       return {
         protocolVersion: req.params?.protocolVersion || '2025-06-18',
         capabilities: { tools: {} },
-        serverInfo: { name: 'agent-mail', version: '0.1.0' },
+        serverInfo: { name: 'agent-mail', version: require('./package.json').version },
         instructions: `You are agent "${ME}" on a shared mailbox. Use mail_send / mail_check to talk to other agents.`,
       };
     case 'tools/list':

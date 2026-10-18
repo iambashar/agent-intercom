@@ -6,8 +6,6 @@ A tiny MCP server that gives any coding agent an inbox. One agent calls `mail_se
 
 With the optional push daemon, a message is delivered straight into the recipient's open session as a new turn, the same way Claude Code's own cross-session messages arrive. Nobody has to poll.
 
-<!-- TODO: demo.gif - Claude asks Codex to review a diff, Codex replies, ~20s -->
-
 ```
 Claude Code session          Codex CLI session          agy (Antigravity) session
   └─ server.js                 └─ server.js               └─ server.js

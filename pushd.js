@@ -73,7 +73,8 @@ function claudePush(sess, m) {
 // Returns a target with push()/close(), or null when no loaded thread matches.
 async function codexTarget(want) {
   const { session } = require('./codex-ws.js');
-  const s = await session();
+  let s;
+  try { s = await session(); } catch { return null; } // no codex daemon running: nobody to push to
   try {
     const loaded = (await s.call('thread/loaded/list', {})).result?.data || [];
     const threads = [];
