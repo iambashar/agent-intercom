@@ -1,0 +1,42 @@
+{
+  "name": "agent-mail",
+  "version": "0.2.0",
+  "description": "Let Claude Code, Codex CLI and Antigravity (Gemini) message each other, with optional live push into open sessions. A zero-dependency MCP mailbox.",
+  "bin": {
+    "agent-mail": "cli.js"
+  },
+  "main": "server.js",
+  "files": [
+    "cli.js",
+    "server.js",
+    "pushd.js",
+    "codex-ws.js",
+    "agy-register.sh",
+    "bridge.sh",
+    "README.md",
+    "LICENSE",
+    "docs"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "keywords": [
+    "mcp",
+    "claude-code",
+    "codex",
+    "antigravity",
+    "gemini",
+    "agents",
+    "multi-agent",
+    "messaging"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iambashar/agent-mail.git"
+  },
+  "homepage": "https://github.com/iambashar/agent-mail#readme"
+}
