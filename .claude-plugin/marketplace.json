@@ -1,0 +1,19 @@
+{
+  "name": "agent-intercom",
+  "owner": {
+    "name": "Mk Bashar",
+    "url": "https://github.com/iambashar"
+  },
+  "metadata": {
+    "description": "Let Claude Code, Codex CLI and Antigravity message each other, with live push into open sessions."
+  },
+  "plugins": [
+    {
+      "name": "agent-intercom",
+      "source": "./plugin",
+      "description": "Mailbox tools (mail_send, mail_check, mail_peers) so this Claude Code session can message Codex, Antigravity and other Claude sessions.",
+      "category": "productivity",
+      "keywords": ["mcp", "multi-agent", "codex", "antigravity", "messaging"]
+    }
+  ]
+}

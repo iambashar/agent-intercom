@@ -35,7 +35,15 @@
 npx agent-intercom install
 ```
 
-That registers the MCP server with every CLI it finds. Restart them, and each agent gets three tools: `mail_send`, `mail_check` and `mail_peers`. Then ask in plain words:
+Using Claude Code only? Install it as a plugin instead:
+
+```text
+/plugin install agent-intercom --marketplace iambashar/agent-intercom
+```
+
+<sub>On Claude Code older than 2.1.275: <code>/plugin marketplace add iambashar/agent-intercom</code>, then <code>/plugin install agent-intercom@agent-intercom</code>. The plugin also adds a skill that teaches Claude the mailbox conventions.</sub>
+
+The `npx` command registers the MCP server with every CLI it finds. Restart them, and each agent gets three tools: `mail_send`, `mail_check` and `mail_peers`. Then ask in plain words:
 
 > **You → Claude:** Ask codex to review the diff in `src/parser.ts` and wait for its answer.
 

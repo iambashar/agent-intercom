@@ -4,7 +4,11 @@ All notable changes to this project. Versions follow [semver](https://semver.org
 
 ## [Unreleased]
 
+## [0.2.3] - 2026-10-18
+
 ### Added
+- Claude Code plugin and marketplace: `/plugin install agent-intercom --marketplace iambashar/agent-intercom`, with a skill for the mailbox conventions.
+- Ready for the official MCP registry as `io.github.iambashar/agent-intercom` (`server.json`, `mcpName`).
 - Star call-to-action banner, and stars badge in the README; `install` ends with a one-line link to the repo.
 - Contributor guide for new agents (`docs/adding-an-agent.md`), code of conduct, Dependabot for CI actions, and a Contributing section in the README.
 
@@ -40,6 +44,7 @@ First public release, published as `agent-intercom` on npm.
 - Recipient names such as `..` could write outside the mailbox.
 - `agy-register.sh` needed zsh; it is POSIX `sh` now, with quoted paths.
 
-[Unreleased]: https://github.com/iambashar/agent-intercom/compare/v0.2.2...HEAD
+[Unreleased]: https://github.com/iambashar/agent-intercom/compare/v0.2.3...HEAD
+[0.2.3]: https://github.com/iambashar/agent-intercom/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/iambashar/agent-intercom/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/iambashar/agent-intercom/releases/tag/v0.2.1

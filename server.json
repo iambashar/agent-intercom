@@ -1,0 +1,45 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.iambashar/agent-intercom",
+  "description": "Lets Claude Code, Codex CLI and Antigravity message each other, with live push into open sessions.",
+  "repository": {
+    "url": "https://github.com/iambashar/agent-intercom",
+    "source": "github"
+  },
+  "version": "0.2.3",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "agent-intercom",
+      "version": "0.2.3",
+      "transport": {
+        "type": "stdio"
+      },
+      "packageArguments": [
+        {
+          "type": "positional",
+          "value": "serve"
+        }
+      ],
+      "environmentVariables": [
+        {
+          "name": "AGENT_NAME",
+          "description": "This agent's mailbox name, e.g. claude, codex or gemini",
+          "isRequired": true,
+          "format": "string",
+          "isSecret": false,
+          "default": "claude"
+        },
+        {
+          "name": "AGENT_MAIL_DIR",
+          "description": "Mailbox folder shared by all agents (default ~/.agent-mail)",
+          "isRequired": false,
+          "format": "string",
+          "isSecret": false
+        }
+      ]
+    }
+  ],
+  "title": "agent-intercom",
+  "websiteUrl": "https://github.com/iambashar/agent-intercom"
+}

@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "agent-intercom": {
+      "command": "npx",
+      "args": ["-y", "agent-intercom", "serve"],
+      "env": {
+        "AGENT_NAME": "claude"
+      }
+    }
+  }
+}
