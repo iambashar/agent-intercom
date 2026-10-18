@@ -12,7 +12,14 @@ REMOTE_AGENTS=${REMOTE_AGENTS:?set REMOTE_AGENTS to the agent names that live on
 LOCAL_AGENTS=${LOCAL_AGENTS:-claude codex gemini}
 INTERVAL=${BRIDGE_INTERVAL:-3}
 LOCAL=${AGENT_MAIL_DIR:-$HOME/.agent-mail}
-SSH="ssh -o BatchMode=yes -o ConnectTimeout=20 -o ServerAliveInterval=30 -o ControlMaster=auto -o ControlPath=$HOME/.ssh/cm-agent-mail-%C -o ControlPersist=900"
+# Agent names end up in remote shell commands and paths, so only allow plain names.
+for a in $REMOTE_AGENTS $LOCAL_AGENTS; do
+  case "$a" in
+    *[!A-Za-z0-9._-]*|.*|*..*) echo "bridge: invalid agent name '$a'" >&2; exit 1 ;;
+  esac
+done
+# ssh expands ~ in ControlPath itself, so a $HOME containing spaces cannot split this command string.
+SSH="ssh -o BatchMode=yes -o ConnectTimeout=20 -o ServerAliveInterval=30 -o ControlMaster=auto -o ControlPath=~/.ssh/cm-agent-mail-%C -o ControlPersist=900"
 log() { printf '%s %s\n' "$(date '+%F %T')" "$*"; }
 
 ensure_remote() {

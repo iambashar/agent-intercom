@@ -12,15 +12,17 @@ const CLAUDE = path.join(tmp, 'claude');
 fs.mkdirSync(path.join(CLAUDE, 'sessions'), { recursive: true });
 
 // Fake agy: records its argv and the two env vars agentapi needs, answers like `agy agentapi send-message`.
+// Prints AGY_OUT instead when that file exists, to simulate agentapi errors.
 const AGY_LOG = path.join(tmp, 'agy.log');
+const AGY_OUT = path.join(tmp, 'agy.out');
 const AGY = path.join(tmp, 'agy');
-fs.writeFileSync(AGY, `#!/bin/sh\nprintf '%s\\n' "$ANTIGRAVITY_LS_ADDRESS" "$ANTIGRAVITY_CSRF_TOKEN" "$@" > ${AGY_LOG}\necho '{"response":{}}'\n`, { mode: 0o755 });
+fs.writeFileSync(AGY, `#!/bin/sh\nprintf '%s\\n' "$ANTIGRAVITY_LS_ADDRESS" "$ANTIGRAVITY_CSRF_TOKEN" "$@" > ${AGY_LOG}\nif [ -f ${AGY_OUT} ]; then cat ${AGY_OUT}; else echo '{"response":{}}'; fi\n`, { mode: 0o755 });
 
 process.env.AGENT_MAIL_DIR = MAIL;
 process.env.CLAUDE_CONFIG_DIR = CLAUDE;
 process.env.AGY_BIN = AGY;
 process.env.CODEX_DAEMON_DIR = path.join(tmp, 'no-codex-daemon');
-const { deliver, scan } = require('../pushd.js');
+const { deliver, scan, recoverClaims } = require('../pushd.js');
 
 function drop(to, body) {
   const id = `${Date.now()}-${crypto.randomBytes(3).toString('hex')}`;
@@ -32,11 +34,12 @@ function drop(to, body) {
 }
 
 // A fake Claude Code session: registry entry, key file and a socket that records each JSON line it gets.
-function fakeClaude(name, updatedAt) {
+function fakeClaude(name, updatedAt, { hangUp = false } = {}) {
   const sock = path.join(tmp, `${name}.sock`);
   const token = crypto.randomBytes(16).toString('hex');
   const lines = [];
   const server = net.createServer((c) => {
+    if (hangUp) return c.destroy();
     let buf = '';
     c.on('data', (d) => {
       buf += d;
@@ -92,6 +95,41 @@ test('pushes mail into a registered agy session with agentapi', async () => {
   assert.deepStrictEqual(args.slice(0, 3), ['agentapi', 'send-message', 'conv-123']);
   assert.ok(fs.existsSync(m.read));
   fs.rmSync(sessions, { recursive: true });
+});
+
+test('a session that drops the connection is a failed push and the mail stays queued', async () => {
+  const g = fakeClaude('gamma', 0, { hangUp: true });
+  const m = drop('claude.gamma', 'will bounce');
+  await assert.rejects(deliver('claude.gamma', m.file), /closed the connection|ECONNRESET|EPIPE/);
+  assert.ok(fs.existsSync(m.file) && !fs.existsSync(m.read) && !fs.existsSync(`${m.file}.pushing`));
+  g.close();
+});
+
+test('agentapi output is parsed as JSON, not pattern-matched', async () => {
+  const sessions = path.join(MAIL, 'gemini', 'sessions');
+  fs.mkdirSync(sessions, { recursive: true });
+  fs.writeFileSync(path.join(sessions, `${process.pid}.json`), JSON.stringify({
+    pid: process.pid, conversationId: 'conv-9', lsAddress: 'localhost:9', csrfToken: 'tok', updatedAt: 1,
+  }));
+  // A body that talks about "error" is still a successful send.
+  fs.writeFileSync(AGY_OUT, JSON.stringify({ response: { sendMessage: { content: 'the "error" was a typo' } } }));
+  const ok = drop('gemini', 'the "error" was a typo');
+  await deliver('gemini', ok.file);
+  assert.ok(fs.existsSync(ok.read));
+  // A real agentapi error keeps the mail queued.
+  fs.writeFileSync(AGY_OUT, JSON.stringify({ error: 'missing CSRF token' }));
+  const bad = drop('gemini', 'should stay');
+  await assert.rejects(deliver('gemini', bad.file), /missing CSRF token/);
+  assert.ok(fs.existsSync(bad.file));
+  fs.rmSync(AGY_OUT);
+  fs.rmSync(sessions, { recursive: true });
+});
+
+test('claims left by a crash are put back in the inbox', () => {
+  const m = drop('codex', 'interrupted');
+  fs.renameSync(m.file, `${m.file}.pushing`);
+  recoverClaims('codex');
+  assert.ok(fs.existsSync(m.file) && !fs.existsSync(`${m.file}.pushing`));
 });
 
 test('leaves mail in the inbox when no live session can take it', async () => {

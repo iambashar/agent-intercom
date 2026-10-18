@@ -7,7 +7,13 @@ const os = require('os');
 const crypto = require('crypto');
 
 const ROOT = process.env.AGENT_MAIL_DIR || path.join(os.homedir(), '.agent-mail');
+// Names become directory names under ROOT: dot-separated segments of [A-Za-z0-9_-], so "." and ".." can't escape it.
+const NAME = /^[\w-]+(\.[\w-]+)*$/;
 const ME = (process.env.AGENT_NAME || 'agent').replace(/[^\w.-]/g, '');
+if (!NAME.test(ME)) {
+  console.error(`agent-mail: invalid AGENT_NAME "${process.env.AGENT_NAME}"`);
+  process.exit(1);
+}
 const dir = (name, sub) => path.join(ROOT, name, sub);
 const ensure = (p) => fs.mkdirSync(p, { recursive: true });
 ensure(dir(ME, 'inbox'));
@@ -46,6 +52,7 @@ const TOOLS = [
 function send({ to, body, reply_to }) {
   to = String(to || '').replace(/[^\w.-]/g, '');
   if (!to || !body) throw new Error('to and body are required');
+  if (!NAME.test(to)) throw new Error(`invalid recipient "${to}": use letters, digits, _ and -, with optional .session suffixes`);
   ensure(dir(to, 'inbox'));
   const id = `${Date.now()}-${crypto.randomBytes(3).toString('hex')}`;
   const msg = { id, from: ME, to, body, reply_to: reply_to || null, sent: new Date().toISOString() };

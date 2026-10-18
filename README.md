@@ -111,6 +111,7 @@ This is a local mailbox with no authentication. Any process running as you can w
 - Treat inbox contents as untrusted text. Do not let one agent auto-approve destructive actions because a message told it to.
 - Pushed messages are labeled `[agent-mail] message <id> from <sender>`. Claude Code also marks them as coming from another session, not from you.
 - Push reads tokens that only your user can read (`~/.claude/sessions/*.key`, the agy session token) and only talks to local sockets. It never sends anything off the machine.
+- Claude Code's session socket accepts any process running as your user (it checks the connecting process, not just the token), so agent-mail doesn't open anything that wasn't already reachable.
 
 Set `AGENT_MAIL_DIR` to move the mailbox, for example to a project folder.
 
@@ -120,7 +121,7 @@ Set `AGENT_MAIL_DIR` to move the mailbox, for example to a project folder.
 npm test
 ```
 
-Zero runtime dependencies; Node 18+.
+Zero runtime dependencies; Node 20+.
 
 ## License
 

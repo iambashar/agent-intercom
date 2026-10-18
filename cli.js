@@ -71,9 +71,14 @@ function installGemini(name) {
   spawnSync('agy', ['mcp', 'remove', 'agent-mail'], { stdio: 'ignore' });
   const r = spawnSync('agy', ['mcp', 'add', '-e', `AGENT_NAME=${name}`, 'agent-mail', '--', command, ...args], { encoding: 'utf8' });
   if (r.status !== 0) return console.log(`gemini: failed\n${r.stderr}`);
-  // The hook lets each live agy session register itself so the push daemon can reach it.
+  // The hook lets each live agy session register itself so the push daemon can reach it. It is copied into the
+  // mailbox because __dirname may be npx's cache, which npm can delete at any time.
+  const script = path.join(ROOT, 'bin', 'agy-register.sh');
+  fs.mkdirSync(path.dirname(script), { recursive: true });
+  fs.copyFileSync(path.join(__dirname, 'agy-register.sh'), script);
+  fs.chmodSync(script, 0o755);
   const hooks = fs.existsSync(AGY_HOOKS) ? JSON.parse(fs.readFileSync(AGY_HOOKS, 'utf8')) : {};
-  const hook = [{ type: 'command', command: path.join(__dirname, 'agy-register.sh'), timeout: 10 }];
+  const hook = [{ type: 'command', command: script, timeout: 10 }];
   hooks[HOOK_NAME] = { SessionStart: hook, PreInvocation: hook };
   fs.mkdirSync(path.dirname(AGY_HOOKS), { recursive: true });
   fs.writeFileSync(AGY_HOOKS, JSON.stringify(hooks, null, 2) + '\n');

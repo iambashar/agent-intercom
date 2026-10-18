@@ -70,3 +70,25 @@ test('rejects send without body', async () => {
   assert.strictEqual(r.isError, true);
   a.close();
 });
+
+test('rejects recipients that would leave the mailbox', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-mail-'));
+  const a = client('a', dir);
+  await a.init();
+  for (const to of ['..', '.', '.hidden', 'a..b']) {
+    const r = await a.call('mail_send', { to, body: 'x' });
+    assert.strictEqual(r.isError, true, to);
+  }
+  assert.ok(!fs.existsSync(path.join(dir, '..', 'inbox')) || !fs.readdirSync(path.join(dir, '..', 'inbox')).length);
+  assert.match((await a.call('mail_send', { to: 'claude.my-session', body: 'x' })).content[0].text, /sent/);
+  a.close();
+});
+
+test('mail_check skips a message the push daemon has claimed', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-mail-'));
+  const b = client('b', dir);
+  await b.init();
+  fs.writeFileSync(path.join(dir, 'b', 'inbox', '1-x.json.pushing'), JSON.stringify({ id: '1-x', from: 'a', to: 'b', body: 'mid-push' }));
+  assert.match((await b.call('mail_check')).content[0].text, /no new messages/);
+  b.close();
+});
