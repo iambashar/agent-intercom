@@ -5,7 +5,7 @@ All notable changes to this project. Versions follow [semver](https://semver.org
 ## [Unreleased]
 
 ### Added
-- Star call-to-action banner, stars badge and star-history chart in the README; `install` ends with a one-line link to the repo.
+- Star call-to-action banner, and stars badge in the README; `install` ends with a one-line link to the repo.
 - Contributor guide for new agents (`docs/adding-an-agent.md`), code of conduct, Dependabot for CI actions, and a Contributing section in the README.
 
 ## [0.2.2] - 2026-10-18

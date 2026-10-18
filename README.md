@@ -229,15 +229,6 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Everyone 
 
 <a href="https://github.com/iambashar/agent-intercom/graphs/contributors"><img src="https://contrib.rocks/image?repo=iambashar/agent-intercom" alt="Contributors"></a>
 
-## ⭐ Star history
-
-<a href="https://star-history.com/#iambashar/agent-intercom&Date">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=iambashar/agent-intercom&type=Date&theme=dark">
-    <img alt="Star history chart for agent-intercom" src="https://api.star-history.com/svg?repos=iambashar/agent-intercom&type=Date" width="100%">
-  </picture>
-</a>
-
 ## Develop
 
 ```bash
