@@ -1,6 +1,6 @@
 {
   "name": "agent-intercom",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Let Claude Code, Codex CLI and Antigravity (Gemini) message each other, with optional live push into open sessions. A zero-dependency MCP mailbox.",
   "bin": {
     "agent-intercom": "cli.js"

@@ -55,4 +55,5 @@ node cli.js push run      # push daemon in the foreground, logs to the terminal
 
 1. Bump `version` in `package.json` and move the `Unreleased` notes in `CHANGELOG.md` under the new version.
 2. Commit, then create a GitHub release with tag `vX.Y.Z`.
-3. The release workflow tests, publishes `@iambashar/agent-intercom` to GitHub Packages, and publishes `agent-intercom` to npm when the `NPM_TOKEN` secret is set.
+3. The release workflow tests, publishes `@iambashar/agent-intercom` to GitHub Packages, and stages `agent-intercom` on npm through trusted publishing.
+4. Approve the staged npm version with 2FA: `npm stage list agent-intercom`, then `npm stage approve <id>`.

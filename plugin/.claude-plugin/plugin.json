@@ -1,6 +1,6 @@
 {
   "name": "agent-intercom",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Mailbox tools (mail_send, mail_check, mail_peers) so this Claude Code session can message Codex, Antigravity and other Claude sessions.",
   "author": {
     "name": "Mk Bashar",
@@ -9,5 +9,11 @@
   "homepage": "https://github.com/iambashar/agent-intercom",
   "repository": "https://github.com/iambashar/agent-intercom",
   "license": "MIT",
-  "keywords": ["mcp", "multi-agent", "codex", "antigravity", "messaging"]
+  "keywords": [
+    "mcp",
+    "multi-agent",
+    "codex",
+    "antigravity",
+    "messaging"
+  ]
 }

@@ -1,8 +1,10 @@
 name: Release
 
-# Runs when a GitHub release is published. Publishes the same tarball to:
-#  - GitHub Packages as @iambashar/agent-intercom (uses the built-in GITHUB_TOKEN)
-#  - npm as agent-intercom, only if the NPM_TOKEN secret is set (a granular token with "bypass 2FA")
+# Runs when a GitHub release is published:
+#  - GitHub Packages: publishes @iambashar/agent-intercom with the built-in GITHUB_TOKEN.
+#  - npm: stages agent-intercom through npm trusted publishing (OIDC, no token). The staged version goes
+#    live after a maintainer approves it with 2FA: `npm stage list agent-intercom`, then
+#    `npm stage approve <id>`, or on npmjs.com.
 on:
   release:
     types: [published]
@@ -45,16 +47,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      # No registry-url here: setup-node would write a token line into .npmrc, and trusted publishing
+      # must authenticate with the workflow's OIDC identity instead.
       - uses: actions/setup-node@v5
         with:
-          node-version: 22
-          registry-url: https://registry.npmjs.org
-      - name: Publish to npm
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          node-version: 24
+      - run: npm install -g npm@12
+      - name: Stage on npm
         run: |
-          if [ -z "$NODE_AUTH_TOKEN" ]; then echo "NPM_TOKEN not set; skipping npm (publish by hand)"; exit 0; fi
-          if npm view "agent-intercom@$(node -p "require('./package.json').version")" version >/dev/null 2>&1; then
-            echo "this version is already on npm; skipping"; exit 0
+          v=$(node -p "require('./package.json').version")
+          if npm view "agent-intercom@$v" version >/dev/null 2>&1; then
+            echo "agent-intercom@$v is already on npm; skipping"; exit 0
           fi
-          npm publish --provenance --access public
+          npm stage publish . --provenance --access public
+          {
+            echo "### agent-intercom@$v staged on npm"
+            echo "Approve it with 2FA to make it live: \`npm stage list agent-intercom\`, then \`npm stage approve <id>\` (or on npmjs.com)."
+          } >> "$GITHUB_STEP_SUMMARY"

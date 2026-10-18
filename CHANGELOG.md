@@ -4,6 +4,13 @@ All notable changes to this project. Versions follow [semver](https://semver.org
 
 ## [Unreleased]
 
+## [0.2.4] - 2026-10-18
+
+No changes to the package itself.
+
+### Changed
+- Releases reach npm through trusted publishing (OIDC) from GitHub Actions, staged for a 2FA approval, with provenance. No npm token is stored anywhere.
+
 ## [0.2.3] - 2026-10-18
 
 ### Added
@@ -44,7 +51,8 @@ First public release, published as `agent-intercom` on npm.
 - Recipient names such as `..` could write outside the mailbox.
 - `agy-register.sh` needed zsh; it is POSIX `sh` now, with quoted paths.
 
-[Unreleased]: https://github.com/iambashar/agent-intercom/compare/v0.2.3...HEAD
+[Unreleased]: https://github.com/iambashar/agent-intercom/compare/v0.2.4...HEAD
+[0.2.4]: https://github.com/iambashar/agent-intercom/compare/v0.2.3...v0.2.4
 [0.2.3]: https://github.com/iambashar/agent-intercom/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/iambashar/agent-intercom/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/iambashar/agent-intercom/releases/tag/v0.2.1
