@@ -4,10 +4,15 @@ All notable changes to this project. Versions follow [semver](https://semver.org
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-10-18
+
+No code changes; the package now ships the new README and the changelog.
+
 ### Added
 - README artwork: animated hero, terminal demo and push diagram (`scripts/build-assets.py` rebuilds them).
 - CI on macOS and Linux with Node 20 and 22, plus a release workflow that publishes to GitHub Packages and npm.
 - CHANGELOG, CONTRIBUTING, SECURITY, and issue and pull request templates.
+- Also published to GitHub Packages as `@iambashar/agent-intercom`.
 
 ## [0.2.1] - 2026-10-18
 
@@ -31,5 +36,6 @@ First public release, published as `agent-intercom` on npm.
 - Recipient names such as `..` could write outside the mailbox.
 - `agy-register.sh` needed zsh; it is POSIX `sh` now, with quoted paths.
 
-[Unreleased]: https://github.com/iambashar/agent-intercom/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/iambashar/agent-intercom/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/iambashar/agent-intercom/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/iambashar/agent-intercom/releases/tag/v0.2.1
