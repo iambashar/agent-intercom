@@ -1,6 +1,6 @@
 {
   "name": "agent-intercom",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Mailbox tools (mail_send, mail_check, mail_peers) so this Claude Code session can message Codex, Antigravity and other Claude sessions.",
   "author": {
     "name": "Mk Bashar",

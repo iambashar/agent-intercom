@@ -4,6 +4,13 @@ All notable changes to this project. Versions follow [semver](https://semver.org
 
 ## [Unreleased]
 
+## [0.2.5] - 2026-10-18
+
+### Changed
+- Clearer tool definitions: each tool now says when to use it, what it changes and what it returns. `mail_check` now states that reading consumes messages.
+- Tools carry MCP titles and annotations (`readOnlyHint`, `idempotentHint`, ...), and their input schemas have parameter descriptions, bounds and `additionalProperties: false`.
+- The server's `instructions` mention all three tools.
+
 ## [0.2.4] - 2026-10-18
 
 No changes to the package itself.
@@ -51,7 +58,8 @@ First public release, published as `agent-intercom` on npm.
 - Recipient names such as `..` could write outside the mailbox.
 - `agy-register.sh` needed zsh; it is POSIX `sh` now, with quoted paths.
 
-[Unreleased]: https://github.com/iambashar/agent-intercom/compare/v0.2.4...HEAD
+[Unreleased]: https://github.com/iambashar/agent-intercom/compare/v0.2.5...HEAD
+[0.2.5]: https://github.com/iambashar/agent-intercom/compare/v0.2.4...v0.2.5
 [0.2.4]: https://github.com/iambashar/agent-intercom/compare/v0.2.3...v0.2.4
 [0.2.3]: https://github.com/iambashar/agent-intercom/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/iambashar/agent-intercom/compare/v0.2.1...v0.2.2

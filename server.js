@@ -23,29 +23,52 @@ fs.writeFileSync(path.join(ROOT, ME, 'alive'), String(Date.now()));
 const TOOLS = [
   {
     name: 'mail_send',
-    description: `Send a message to another agent (you are "${ME}"). Use mail_peers to see names. Set reply_to to a message id when answering one.`,
+    title: 'Send a message to another agent',
+    description:
+      `Deliver a text message from you ("${ME}") to another coding agent's inbox, for example to hand off a task, ask a question or report a result. ` +
+      'Call mail_peers first if you are unsure of the recipient name. To answer a message you received from mail_check, pass its id as reply_to. ' +
+      'Each call writes one new message and never edits or removes existing mail. If the recipient has not started yet, the message waits in its inbox. ' +
+      'Returns "sent <id> to <name>"; keep the id if you expect a reply that references it.',
     inputSchema: {
       type: 'object',
       properties: {
-        to: { type: 'string', description: 'Recipient agent name, e.g. "codex" or "claude"' },
-        body: { type: 'string' },
-        reply_to: { type: 'string', description: 'Id of the message you are replying to' },
+        to: { type: 'string', pattern: '^[\\w-]+(\\.[\\w-]+)*$', description: 'Recipient agent name as listed by mail_peers, e.g. "codex", "claude" or "gemini". Letters, digits, _ and -, with optional .suffix segments.' },
+        body: { type: 'string', minLength: 1, description: 'Message text, in plain text or Markdown. Include everything the recipient needs, since it cannot see your conversation.' },
+        reply_to: { type: 'string', description: 'Optional. The id of the message you are answering (the value in [brackets] from mail_check), so the recipient can match the reply to its question.' },
       },
       required: ['to', 'body'],
+      additionalProperties: false,
     },
+    annotations: { title: 'Send a message to another agent', readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
   },
   {
     name: 'mail_check',
-    description: `Read and consume new messages addressed to "${ME}". With wait_seconds > 0, blocks until a message arrives or the time runs out (max 300).`,
+    title: 'Read new messages',
+    description:
+      `Fetch the unread messages addressed to you ("${ME}"), oldest first. Use it when you expect a reply or want to see if another agent wrote to you. ` +
+      'Reading consumes the messages: each one is moved to your read folder and is not returned again, so act on or note what you need. ' +
+      'With wait_seconds above 0 the call blocks until at least one message arrives or the time runs out. ' +
+      'Returns each message as "[<id>] from <sender> (re <id>) at <time>:" followed by its body, or "no new messages". ' +
+      'When live push is installed, new mail may already appear in your session without calling this tool.',
     inputSchema: {
       type: 'object',
-      properties: { wait_seconds: { type: 'number', description: 'Block up to this long for a message' } },
+      properties: {
+        wait_seconds: { type: 'number', minimum: 0, maximum: 300, default: 0, description: 'How long to wait for a message if the inbox is empty, in seconds (0 to 300). 0 returns immediately.' },
+      },
+      additionalProperties: false,
     },
+    annotations: { title: 'Read new messages', readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
   },
   {
     name: 'mail_peers',
-    description: 'List known agent names and when each last started.',
-    inputSchema: { type: 'object', properties: {} },
+    title: 'List agents on the mailbox',
+    description:
+      'List every agent name that has a mailbox here, so you know valid recipients for mail_send. ' +
+      'Read-only: it changes nothing. ' +
+      'Returns one line per agent: "<name> - last started <ISO time>", or "never started" for an agent that has mail waiting but has not run yet. Your own name is marked "(you)". ' +
+      'A recent start time suggests the agent is active, but it does not guarantee a session is open right now.',
+    inputSchema: { type: 'object', properties: {}, additionalProperties: false },
+    annotations: { title: 'List agents on the mailbox', readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   },
 ];
 
@@ -111,7 +134,7 @@ async function handle(req) {
         protocolVersion: req.params?.protocolVersion || '2025-06-18',
         capabilities: { tools: {} },
         serverInfo: { name: 'agent-intercom', version: require('./package.json').version },
-        instructions: `You are agent "${ME}" on a shared mailbox. Use mail_send / mail_check to talk to other agents.`,
+        instructions: `You are agent "${ME}" on a mailbox shared with other coding agents. Use mail_peers to see who is there, mail_send to message one, and mail_check to read replies.`,
       };
     case 'tools/list':
       return { tools: TOOLS };
