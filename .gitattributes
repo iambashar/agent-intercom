@@ -1,0 +1,3 @@
+# The artwork generator is tooling, not part of the package; keep it out of the language stats.
+scripts/** linguist-vendored
+docs/assets/** linguist-generated
