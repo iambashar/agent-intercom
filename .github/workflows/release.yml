@@ -62,5 +62,9 @@ jobs:
           npm stage publish . --provenance --access public
           {
             echo "### agent-intercom@$v staged on npm"
-            echo "Approve it with 2FA to make it live: \`npm stage list agent-intercom\`, then \`npm stage approve <id>\` (or on npmjs.com)."
+            echo "Approve it with 2FA to make it live (npm 12+, or on npmjs.com):"
+            echo '```'
+            echo 'npx -y npm@latest stage list agent-intercom      # copy the id'
+            echo 'npx -y npm@latest stage approve <id>'
+            echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
