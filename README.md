@@ -7,7 +7,7 @@
 [![npm](https://img.shields.io/npm/v/agent-intercom?style=for-the-badge&logo=npm&color=cb3837&label=npx%20agent-intercom)](https://www.npmjs.com/package/agent-intercom)
 [![CI](https://img.shields.io/github/actions/workflow/status/iambashar/agent-intercom/ci.yml?style=for-the-badge&logo=githubactions&logoColor=white&label=tests)](https://github.com/iambashar/agent-intercom/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F5C451?style=for-the-badge)](LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/iambashar/agent-intercom?style=for-the-badge&logo=github&color=F0A93B&label=%E2%AD%90%20stars)](https://github.com/iambashar/agent-intercom/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/iambashar/agent-intercom?style=for-the-badge&logo=github&color=F0A93B&label=%E2%AD%90%20stars&cacheSeconds=3600)](https://github.com/iambashar/agent-intercom/stargazers)
 
 [![Node 20+](https://img.shields.io/badge/node-%E2%89%A520-339933?style=flat-square&logo=nodedotjs&logoColor=white)](package.json)
 [![Zero dependencies](https://img.shields.io/badge/dependencies-0-19C37D?style=flat-square)](package.json)
