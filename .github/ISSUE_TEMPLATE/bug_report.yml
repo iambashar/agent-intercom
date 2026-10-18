@@ -1,0 +1,32 @@
+name: Bug report
+description: Something doesn't work, or a push didn't arrive
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, what you saw instead.
+    validations:
+      required: true
+  - type: dropdown
+    id: agent
+    attributes:
+      label: Which agent was the recipient?
+      options: [Claude Code, Codex CLI, Antigravity (agy), Other MCP client, Not about delivery]
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: "`agent-intercom` version, OS, Node, and the CLI version (e.g. `claude --version`)"
+      placeholder: "0.2.1, macOS 15, Node 22.4, Claude Code 2.1.302"
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Push daemon log
+      description: "The relevant lines from ~/Library/Logs/agent-intercom-pushd.log or `journalctl --user -u agent-intercom-pushd`. Remove anything private."
+      render: text

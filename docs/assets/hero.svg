@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="440" viewBox="0 0 1280 440" role="img">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0B1020"/><stop offset="1" stop-color="#161D38"/></linearGradient>
+  <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="#ffffff" opacity="0.06"/></pattern>
+  <linearGradient id="title" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#E07A55"/><stop offset="0.5" stop-color="#F5C451"/><stop offset="1" stop-color="#7B8CFF"/></linearGradient>
+  <radialGradient id="hubglow"><stop offset="0" stop-color="#F5C451" stop-opacity="0.55"/><stop offset="1" stop-color="#F5C451" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1280" height="440" rx="28" fill="url(#bg)"/>
+<rect width="1280" height="440" rx="28" fill="url(#dots)"/>
+
+<text x="72" y="150" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="70" font-weight="800" fill="url(#title)" letter-spacing="-1.5">agent-intercom</text>
+<text x="74" y="200" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="27" font-weight="600" fill="#E8ECF8">Your coding agents, on one channel.</text>
+<text x="74" y="240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="18" fill="#9AA4C7">Claude Code · Codex CLI · Antigravity — messages land</text>
+<text x="74" y="266" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="18" fill="#9AA4C7">straight in the open session. No polling.</text>
+<g transform="translate(74,306)">
+  <rect width="420" height="54" rx="12" fill="#0E1430" stroke="#2A3366"/>
+  <text x="22" y="34" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="19" fill="#F5C451">$</text>
+  <text x="44" y="34" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="19" fill="#E8ECF8">npx agent-intercom install</text>
+  <rect x="352" y="17" width="10" height="20" fill="#E8ECF8"><animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/></rect>
+</g>
+<path id="p-claude" d="M960,238 L770,150" stroke="#E07A55" stroke-opacity="0.35" stroke-width="2.5" stroke-dasharray="6 8" fill="none"><animate attributeName="stroke-dashoffset" from="0" to="-28" dur="1.2s" repeatCount="indefinite"/></path><path id="p-codex" d="M960,238 L1150,150" stroke="#19C37D" stroke-opacity="0.35" stroke-width="2.5" stroke-dasharray="6 8" fill="none"><animate attributeName="stroke-dashoffset" from="0" to="-28" dur="1.2s" repeatCount="indefinite"/></path><path id="p-gemini" d="M960,238 L960,368" stroke="#7B8CFF" stroke-opacity="0.35" stroke-width="2.5" stroke-dasharray="6 8" fill="none"><animate attributeName="stroke-dashoffset" from="0" to="-28" dur="1.2s" repeatCount="indefinite"/></path>
+<circle r="6" fill="#E07A55" opacity="0">
+  <animateMotion dur="2.4s" begin="0s" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#p-claude"/></animateMotion>
+  <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="2.4s" begin="0s" repeatCount="indefinite"/>
+</circle><circle r="6" fill="#19C37D" opacity="0">
+  <animateMotion dur="2.4s" begin="1.2s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath href="#p-codex"/></animateMotion>
+  <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="2.4s" begin="1.2s" repeatCount="indefinite"/>
+</circle><circle r="6" fill="#19C37D" opacity="0">
+  <animateMotion dur="2.4s" begin="0.6s" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#p-codex"/></animateMotion>
+  <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="2.4s" begin="0.6s" repeatCount="indefinite"/>
+</circle><circle r="6" fill="#7B8CFF" opacity="0">
+  <animateMotion dur="2.4s" begin="1.8s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath href="#p-gemini"/></animateMotion>
+  <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="2.4s" begin="1.8s" repeatCount="indefinite"/>
+</circle><circle r="6" fill="#7B8CFF" opacity="0">
+  <animateMotion dur="2.4s" begin="0.3s" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#p-gemini"/></animateMotion>
+  <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="2.4s" begin="0.3s" repeatCount="indefinite"/>
+</circle><circle r="6" fill="#E07A55" opacity="0">
+  <animateMotion dur="2.4s" begin="1.5s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath href="#p-claude"/></animateMotion>
+  <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="2.4s" begin="1.5s" repeatCount="indefinite"/>
+</circle>
+<circle cx="960" cy="238" r="80" fill="url(#hubglow)"><animate attributeName="r" values="64;92;64" dur="2.4s" repeatCount="indefinite"/></circle>
+<circle cx="960" cy="238" r="34" fill="#1A1F3D" stroke="#F5C451" stroke-width="3"/>
+<g fill="none" stroke="#F5C451" stroke-width="3" stroke-linecap="round">
+  <path d="M949,229 q-7,9 0,18"/><path d="M971,229 q7,9 0,18"/>
+  <path d="M941,223 q-12,15 0,30"/><path d="M979,223 q12,15 0,30"/>
+</g>
+<circle cx="960" cy="238" r="4.5" fill="#F5C451"/>
+<text x="1008" y="244" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="13" fill="#9AA4C7">pushd</text>
+
+<g>
+  <circle cx="770" cy="150" r="52" fill="#E07A55" opacity="0.12">
+    <animate attributeName="r" values="46;58;46" dur="3.2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.18;0.04;0.18" dur="3.2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="770" cy="150" r="40" fill="#0E1430" stroke="#E07A55" stroke-width="3"/>
+  <line x1="770" y1="150" x2="790.0" y2="150.0" stroke="#E07A55" stroke-width="5" stroke-linecap="round"/><line x1="770" y1="150" x2="750.0" y2="150.0" stroke="#E07A55" stroke-width="5" stroke-linecap="round"/><line x1="770" y1="150" x2="770.0" y2="170.0" stroke="#E07A55" stroke-width="5" stroke-linecap="round"/><line x1="770" y1="150" x2="770.0" y2="130.0" stroke="#E07A55" stroke-width="5" stroke-linecap="round"/><line x1="770" y1="150" x2="784.0" y2="164.0" stroke="#E07A55" stroke-width="5" stroke-linecap="round"/><line x1="770" y1="150" x2="756.0" y2="164.0" stroke="#E07A55" stroke-width="5" stroke-linecap="round"/><line x1="770" y1="150" x2="784.0" y2="136.0" stroke="#E07A55" stroke-width="5" stroke-linecap="round"/><line x1="770" y1="150" x2="756.0" y2="136.0" stroke="#E07A55" stroke-width="5" stroke-linecap="round"/>
+  <text x="770" y="58" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#E8ECF8">Claude Code</text>
+  <text x="770" y="78" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="12.5" fill="#9AA4C7">peer socket</text>
+</g>
+
+<g>
+  <circle cx="1150" cy="150" r="52" fill="#19C37D" opacity="0.12">
+    <animate attributeName="r" values="46;58;46" dur="3.2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.18;0.04;0.18" dur="3.2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="1150" cy="150" r="40" fill="#0E1430" stroke="#19C37D" stroke-width="3"/>
+  <polyline points="1134,138 1146,150 1134,162" fill="none" stroke="#19C37D" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><line x1="1152" y1="163" x2="1168" y2="163" stroke="#19C37D" stroke-width="5" stroke-linecap="round"/>
+  <text x="1150" y="58" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#E8ECF8">Codex CLI</text>
+  <text x="1150" y="78" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="12.5" fill="#9AA4C7">app-server</text>
+</g>
+
+<g>
+  <circle cx="960" cy="368" r="52" fill="#7B8CFF" opacity="0.12">
+    <animate attributeName="r" values="46;58;46" dur="3.2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.18;0.04;0.18" dur="3.2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="960" cy="368" r="40" fill="#0E1430" stroke="#7B8CFF" stroke-width="3"/>
+  <path d="M960,344 Q965.28,362.72 984,368 Q965.28,373.28 960,392 Q954.72,373.28 936,368 Q954.72,362.72 960,344Z" fill="#7B8CFF"/>
+  <text x="1092" y="364" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#E8ECF8">Antigravity</text>
+  <text x="1092" y="384" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="12.5" fill="#9AA4C7">agentapi</text>
+</g>
+
+</svg>

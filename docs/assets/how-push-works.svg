@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="520" viewBox="0 0 1280 520" role="img">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0B1020"/><stop offset="1" stop-color="#161D38"/></linearGradient>
+  <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="#ffffff" opacity="0.06"/></pattern>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10z" fill="#9AA4C7"/></marker>
+</defs>
+<rect width="1280" height="520" rx="24" fill="url(#bg)"/>
+<rect width="1280" height="520" rx="24" fill="url(#dots)"/>
+
+<text x="640" y="56" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="26" font-weight="800" fill="#E8ECF8">How live push works</text>
+<text x="640" y="86" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" fill="#9AA4C7">Event-driven: one file-system watcher, no polling, each message delivered exactly once</text>
+<g transform="translate(40,200)">
+  <rect width="200" height="100" rx="14" fill="#10162E" stroke="#F5C451" stroke-width="2"/>
+  <text x="100.0" y="46.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#E8ECF8">mail_send</text>
+  <text x="100.0" y="70.0" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="13" fill="#9AA4C7">from any agent</text>
+</g>
+<g transform="translate(300,200)">
+  <rect width="230" height="100" rx="14" fill="#10162E" stroke="#F5C451" stroke-width="2"/>
+  <text x="115.0" y="46.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#E8ECF8">inbox</text>
+  <text x="115.0" y="70.0" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="13" fill="#9AA4C7">~/.agent-mail/&lt;name&gt;/</text>
+</g>
+<g transform="translate(590,150)">
+  <rect width="250" height="200" rx="16" fill="#151B3A" stroke="#F5C451" stroke-width="2.5"/>
+  <text x="125" y="40" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" font-weight="800" fill="#F5C451">pushd</text>
+  <text x="125" y="78" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" fill="#E8ECF8">① claim  →  .pushing</text>
+  <text x="125" y="108" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" fill="#E8ECF8">② inject into session</text>
+  <text x="125" y="138" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" fill="#E8ECF8">③ move to read/</text>
+  <text x="125" y="176" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" fill="#9AA4C7">failed? back to inbox, retry</text>
+</g>
+<g transform="translate(960,120)">
+  <rect width="280" height="84" rx="14" fill="#10162E" stroke="#E07A55" stroke-width="2"/>
+  <text x="140.0" y="38.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#E8ECF8">Claude Code</text>
+  <text x="140.0" y="62.0" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="13" fill="#9AA4C7">/tmp/cc-socks/&lt;pid&gt;.sock</text>
+</g>
+<g transform="translate(960,214)">
+  <rect width="280" height="84" rx="14" fill="#10162E" stroke="#19C37D" stroke-width="2"/>
+  <text x="140.0" y="38.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#E8ECF8">Codex CLI</text>
+  <text x="140.0" y="62.0" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="13" fill="#9AA4C7">app-server · turn/start</text>
+</g>
+<g transform="translate(960,308)">
+  <rect width="280" height="84" rx="14" fill="#10162E" stroke="#7B8CFF" stroke-width="2"/>
+  <text x="140.0" y="38.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#E8ECF8">Antigravity (agy)</text>
+  <text x="140.0" y="62.0" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="13" fill="#9AA4C7">agentapi send-message</text>
+</g>
+<path id="f1" d="M240,250 L294,250" fill="none" stroke="#F5C451" stroke-opacity="0.55" stroke-width="2.5" marker-end="url(#ah)"/><circle r="6" fill="#F5C451" opacity="0">
+  <animateMotion dur="2.2s" begin="0s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath href="#f1"/></animateMotion>
+  <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="2.2s" begin="0s" repeatCount="indefinite"/>
+</circle>
+<path id="f2" d="M530,250 L584,250" fill="none" stroke="#F5C451" stroke-opacity="0.55" stroke-width="2.5" marker-end="url(#ah)"/><circle r="6" fill="#F5C451" opacity="0">
+  <animateMotion dur="2.2s" begin="0.4s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath href="#f2"/></animateMotion>
+  <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="2.2s" begin="0.4s" repeatCount="indefinite"/>
+</circle>
+<path id="f3" d="M840,220 C900,220 900,162 954,162" fill="none" stroke="#E07A55" stroke-opacity="0.55" stroke-width="2.5" marker-end="url(#ah)"/><circle r="6" fill="#E07A55" opacity="0">
+  <animateMotion dur="2.2s" begin="0.8s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath href="#f3"/></animateMotion>
+  <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="2.2s" begin="0.8s" repeatCount="indefinite"/>
+</circle>
+<path id="f4" d="M840,250 L954,256" fill="none" stroke="#19C37D" stroke-opacity="0.55" stroke-width="2.5" marker-end="url(#ah)"/><circle r="6" fill="#19C37D" opacity="0">
+  <animateMotion dur="2.2s" begin="1.0s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath href="#f4"/></animateMotion>
+  <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="2.2s" begin="1.0s" repeatCount="indefinite"/>
+</circle>
+<path id="f5" d="M840,280 C900,280 900,350 954,350" fill="none" stroke="#7B8CFF" stroke-opacity="0.55" stroke-width="2.5" marker-end="url(#ah)"/><circle r="6" fill="#7B8CFF" opacity="0">
+  <animateMotion dur="2.2s" begin="1.2s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath href="#f5"/></animateMotion>
+  <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="2.2s" begin="1.2s" repeatCount="indefinite"/>
+</circle>
+<path d="M415,300 L415,440 L640,440" fill="none" stroke="#9AA4C7" stroke-opacity="0.5" stroke-width="2" stroke-dasharray="6 7" marker-end="url(#ah)"/>
+<g transform="translate(650,405)">
+  <rect width="330" height="70" rx="14" fill="#10162E" stroke="#3A4475" stroke-width="2"/>
+  <text x="165.0" y="31.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#E8ECF8">no open session?</text>
+  <text x="165.0" y="55.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" fill="#9AA4C7">stays in the inbox for mail_check</text>
+</g>
+
+</svg>

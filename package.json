@@ -15,7 +15,8 @@
     "bridge.sh",
     "README.md",
     "LICENSE",
-    "docs"
+    "CHANGELOG.md",
+    "docs/*.md"
   ],
   "scripts": {
     "test": "node --test test/*.test.js"
@@ -38,5 +39,8 @@
     "type": "git",
     "url": "git+https://github.com/iambashar/agent-intercom.git"
   },
-  "homepage": "https://github.com/iambashar/agent-intercom#readme"
+  "homepage": "https://github.com/iambashar/agent-intercom#readme",
+  "bugs": {
+    "url": "https://github.com/iambashar/agent-intercom/issues"
+  }
 }
