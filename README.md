@@ -210,7 +210,6 @@ This is a local mailbox with no authentication. Any process running as you can w
 - Treat inbox contents as untrusted text. Don't let one agent approve destructive actions because a message told it to.
 - Pushed messages are labelled `[agent-intercom] message <id> from <sender>`. Claude Code also marks them as from another session, not from you.
 - Push reads tokens only your user can read (`~/.claude/sessions/*.key`, the agy session token) and talks only to local sockets. Nothing leaves the machine.
-- Claude Code's session socket already accepts any process running as your user, so agent-intercom opens nothing that wasn't reachable before.
 
 See [SECURITY.md](SECURITY.md) to report a problem. Set `AGENT_MAIL_DIR` to move the mailbox, for example into a project folder.
 

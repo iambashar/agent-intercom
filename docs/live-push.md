@@ -31,7 +31,7 @@ Beside it, `<pid>.<sha256 of the socket path>.key` (mode 0600) holds `{"peerToke
 {"type":"user","message":{"role":"user","content":"<text>"},"from":"agent-intercom:<sender>"}
 ```
 
-On macOS the session also checks who is connecting, by process and user ID, and accepts a message from your own user even with a wrong token. It never replies on the socket. A connection that closes before the daemon finishes writing counts as a failed push.
+The session never replies on the socket. A connection that closes before the daemon finishes writing counts as a failed push.
 
 The session queues this like a message from another session. It starts a turn if the session is idle, or shows up mid-turn if it's busy. Claude Code labels it as coming from another session, so the model applies its usual peer-message caution.
 
