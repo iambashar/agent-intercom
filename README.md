@@ -22,7 +22,7 @@ Each client launches its own copy of the server. The copies share a folder, and 
 ## Install
 
 ```sh
-npx agent-mail install
+npx @basharmk/agent-mail install
 ```
 
 This registers the server with every CLI it finds, then you restart them:
@@ -31,7 +31,7 @@ This registers the server with every CLI it finds, then you restart them:
 - **Codex:** a managed block in `~/.codex/config.toml` (backed up first).
 - **Antigravity CLI (`agy`):** `agy mcp add`, plus a session hook in `~/.gemini/config/hooks.json` used by push.
 
-Use `--only claude|codex|gemini` to do one, and `--local` to pin a git checkout instead of npx. Remove everything with `npx agent-mail uninstall`.
+Use `--only claude|codex|gemini` to do one, and `--local` to pin a git checkout instead of npx. Remove everything with `npx @basharmk/agent-mail uninstall`.
 
 > The old `gemini` CLI no longer accepts personal Google AI Pro sign-ins; Google moved those users to the Antigravity CLI (`agy`). Its agent is called `gemini` here by default.
 
@@ -58,7 +58,7 @@ MCP servers are passive: a message sits in the inbox until the agent calls `mail
 | agy | `agy agentapi send-message` into the registered conversation |
 
 ```sh
-npm i -g agent-mail          # the daemon needs a stable path, so not npx
+npm i -g @basharmk/agent-mail          # the daemon needs a stable path, so not npx
 agent-mail install --push    # or: agent-mail push install
 ```
 
@@ -82,7 +82,7 @@ If no session is open, the message stays in the inbox and `mail_check` still wor
 Names are just `AGENT_NAME`. Give each session its own, for example `claude-api` and `claude-web`:
 
 ```sh
-npx agent-mail install --only claude --claude-name claude-api
+npx @basharmk/agent-mail install --only claude --claude-name claude-api
 ```
 
 ## Another machine

@@ -19,11 +19,11 @@ const [cmd, ...rest] = process.argv.slice(2);
 const flag = (f) => rest.includes(f);
 const opt = (f, d) => (rest.includes(f) ? rest[rest.indexOf(f) + 1] : d);
 
-// `npx agent-mail serve` is the stable command; --local pins this checkout instead.
+// `npx @basharmk/agent-mail serve` is the stable command; --local pins this checkout instead.
 function serverCommand() {
   return flag('--local')
     ? { command: 'node', args: [path.join(__dirname, 'server.js')] }
-    : { command: 'npx', args: ['-y', 'agent-mail', 'serve'] };
+    : { command: 'npx', args: ['-y', '@basharmk/agent-mail', 'serve'] };
 }
 
 const has = (bin) => spawnSync('which', [bin]).status === 0;
@@ -98,7 +98,7 @@ function uninstallGemini() {
 // The push daemon has to outlive npx's cache, so it runs from a stable checkout or global install.
 function pushInstall() {
   if (__dirname.includes(`${path.sep}_npx${path.sep}`)) {
-    console.error('push: run this from a global install (npm i -g agent-mail) or a git checkout, not npx');
+    console.error('push: run this from a global install (npm i -g @basharmk/agent-mail) or a git checkout, not npx');
     process.exit(1);
   }
   const node = process.execPath;
