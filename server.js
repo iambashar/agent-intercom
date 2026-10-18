@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// agent-mail: tiny file-backed mailbox exposed as an MCP stdio server.
+// agent-intercom: tiny file-backed mailbox exposed as an MCP stdio server.
 // Any MCP client (Claude Code, Codex CLI) sets AGENT_NAME and gets the same three tools.
 const fs = require('fs');
 const path = require('path');
@@ -11,7 +11,7 @@ const ROOT = process.env.AGENT_MAIL_DIR || path.join(os.homedir(), '.agent-mail'
 const NAME = /^[\w-]+(\.[\w-]+)*$/;
 const ME = (process.env.AGENT_NAME || 'agent').replace(/[^\w.-]/g, '');
 if (!NAME.test(ME)) {
-  console.error(`agent-mail: invalid AGENT_NAME "${process.env.AGENT_NAME}"`);
+  console.error(`agent-intercom: invalid AGENT_NAME "${process.env.AGENT_NAME}"`);
   process.exit(1);
 }
 const dir = (name, sub) => path.join(ROOT, name, sub);
@@ -110,7 +110,7 @@ async function handle(req) {
       return {
         protocolVersion: req.params?.protocolVersion || '2025-06-18',
         capabilities: { tools: {} },
-        serverInfo: { name: 'agent-mail', version: require('./package.json').version },
+        serverInfo: { name: 'agent-intercom', version: require('./package.json').version },
         instructions: `You are agent "${ME}" on a shared mailbox. Use mail_send / mail_check to talk to other agents.`,
       };
     case 'tools/list':

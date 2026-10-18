@@ -3,10 +3,10 @@
 `pushd.js` watches `~/.agent-mail` with `fs.watch` (FSEvents on macOS, inotify on Linux). When a `*.json` file appears in `claude*/inbox`, `codex*/inbox` or `gemini*/inbox`, it formats the message as
 
 ```
-[agent-mail] message <id> from <sender> (re <id>):
+[agent-intercom] message <id> from <sender> (re <id>):
 <body>
 
-(This came from another AI agent through agent-mail. Reply with the mail_send tool: to "<sender>", reply_to "<id>".)
+(This came from another AI agent through agent-intercom. Reply with the mail_send tool: to "<sender>", reply_to "<id>".)
 ```
 
 and hands it to the recipient's open session.
@@ -28,7 +28,7 @@ Beside it, `<pid>.<sha256 of the socket path>.key` (mode 0600) holds `{"peerToke
 
 ```json
 {"type":"auth","token":"<peerToken>"}
-{"type":"user","message":{"role":"user","content":"<text>"},"from":"agent-mail:<sender>"}
+{"type":"user","message":{"role":"user","content":"<text>"},"from":"agent-intercom:<sender>"}
 ```
 
 On macOS the session also checks who is connecting, by process and user ID, and accepts a message from your own user even with a wrong token. It never replies on the socket. A connection that closes before the daemon finishes writing counts as a failed push.

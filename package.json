@@ -1,9 +1,9 @@
 {
-  "name": "@basharmk/agent-mail",
+  "name": "agent-intercom",
   "version": "0.2.1",
   "description": "Let Claude Code, Codex CLI and Antigravity (Gemini) message each other, with optional live push into open sessions. A zero-dependency MCP mailbox.",
   "bin": {
-    "agent-mail": "cli.js"
+    "agent-intercom": "cli.js"
   },
   "main": "server.js",
   "files": [
@@ -36,7 +36,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/iambashar/agent-mail.git"
+    "url": "git+https://github.com/iambashar/agent-intercom.git"
   },
-  "homepage": "https://github.com/iambashar/agent-mail#readme"
+  "homepage": "https://github.com/iambashar/agent-intercom#readme"
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// agent-mail push daemon: when a message lands in ~/.agent-mail/<name>/inbox, push it straight into the
+// agent-intercom push daemon: when a message lands in ~/.agent-mail/<name>/inbox, push it straight into the
 // recipient's live session instead of waiting for it to poll mail_check.
 //   claude[.<session-name>]  -> Claude Code peer socket (/tmp/cc-socks/<pid>.sock, same path SendMessage uses)
 //   codex[.<thread-id-prefix>] -> codex app-server daemon, turn/start (or turn/steer if a turn is running)
@@ -30,8 +30,8 @@ function pick(list, want, match) {
 }
 
 function render(m) {
-  return `[agent-mail] message ${m.id} from ${m.from}${m.reply_to ? ` (re ${m.reply_to})` : ''}:\n${m.body}\n\n` +
-    `(This came from another AI agent through agent-mail. Reply with the mail_send tool: to "${m.from}", reply_to "${m.id}".)`;
+  return `[agent-intercom] message ${m.id} from ${m.from}${m.reply_to ? ` (re ${m.reply_to})` : ''}:\n${m.body}\n\n` +
+    `(This came from another AI agent through agent-intercom. Reply with the mail_send tool: to "${m.from}", reply_to "${m.id}".)`;
 }
 
 // ---- Claude Code: peer messaging socket ----
@@ -60,7 +60,7 @@ function claudePush(sess, m) {
     };
     const c = net.createConnection({ path: sess.messagingSocketPath }, () => {
       c.write(JSON.stringify({ type: 'auth', token: key.peerToken }) + '\n');
-      c.write(JSON.stringify({ type: 'user', message: { role: 'user', content: render(m) }, from: `agent-mail:${m.from}` }) + '\n',
+      c.write(JSON.stringify({ type: 'user', message: { role: 'user', content: render(m) }, from: `agent-intercom:${m.from}` }) + '\n',
         () => { setTimeout(() => { c.end(); finish(); }, 300); });
     });
     const timer = setTimeout(() => finish(new Error('claude socket timeout')), 5000);
@@ -211,13 +211,13 @@ function main() {
     });
   } catch (e) {
     // Recursive fs.watch needs Node 20+ on Linux.
-    console.error(`agent-mail pushd: cannot watch ${ROOT} recursively (${e.code || e.message}); Node 20 or newer is required`);
+    console.error(`agent-intercom pushd: cannot watch ${ROOT} recursively (${e.code || e.message}); Node 20 or newer is required`);
     process.exit(1);
   }
-  watcher.on('error', (e) => { console.error(`agent-mail pushd: watch failed: ${e.message}`); process.exit(1); });
+  watcher.on('error', (e) => { console.error(`agent-intercom pushd: watch failed: ${e.message}`); process.exit(1); });
   // Mail that arrived while the daemon was down.
   for (const n of fs.readdirSync(ROOT)) if (local(n)) scan(n);
-  log(`agent-mail pushd watching ${ROOT}`);
+  log(`agent-intercom pushd watching ${ROOT}`);
 }
 
 if (require.main === module) main();

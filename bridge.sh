@@ -1,5 +1,5 @@
 #!/bin/bash
-# agent-mail bridge between this machine and a remote one over SSH (no shared filesystem needed).
+# agent-intercom bridge between this machine and a remote one over SSH (no shared filesystem needed).
 #   here -> remote : messages addressed to REMOTE_AGENTS are moved to the remote mailbox.
 #   remote -> here : messages addressed to LOCAL_AGENTS are moved to this mailbox.
 # rsync writes a temp file and renames, so a reader never sees a half-written message.
@@ -19,7 +19,7 @@ for a in $REMOTE_AGENTS $LOCAL_AGENTS; do
   esac
 done
 # ssh expands ~ in ControlPath itself, so a $HOME containing spaces cannot split this command string.
-SSH="ssh -o BatchMode=yes -o ConnectTimeout=20 -o ServerAliveInterval=30 -o ControlMaster=auto -o ControlPath=~/.ssh/cm-agent-mail-%C -o ControlPersist=900"
+SSH="ssh -o BatchMode=yes -o ConnectTimeout=20 -o ServerAliveInterval=30 -o ControlMaster=auto -o ControlPath=~/.ssh/cm-agent-intercom-%C -o ControlPersist=900"
 log() { printf '%s %s\n' "$(date '+%F %T')" "$*"; }
 
 ensure_remote() {

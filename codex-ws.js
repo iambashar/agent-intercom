@@ -95,7 +95,7 @@ async function session({ sock = daemonSock(), timeoutMs = 15000 } = {}) {
     ws.send({ jsonrpc: '2.0', id: i, method, params });
   });
   try {
-    await call('initialize', { clientInfo: { name: 'agent-mail', version: '0' } });
+    await call('initialize', { clientInfo: { name: 'agent-intercom', version: '0' } });
   } catch (e) { ws.close(); throw e; }
   ws.send({ jsonrpc: '2.0', method: 'initialized' });
   return { call, close: () => ws.close() };

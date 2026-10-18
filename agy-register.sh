@@ -1,5 +1,5 @@
 #!/bin/sh
-# Registers a live agy (Antigravity CLI) conversation so agent-mail can push messages into it
+# Registers a live agy (Antigravity CLI) conversation so agent-intercom can push messages into it
 # with `agy agentapi send-message`. That call needs the session's language-server address and CSRF token,
 # which agy only puts in its run_command environment (not in hook or MCP server environments). Two modes:
 #  - as an agy hook (SessionStart/PreInvocation; stdin JSON, no token in env): if this conversation is not
@@ -27,7 +27,7 @@ e=os.environ
 print(json.dumps({"pid":int(e["PID"]),"conversationId":e["ANTIGRAVITY_CONVERSATION_ID"],"cwd":e["CWD"],
 "lsAddress":e["ANTIGRAVITY_LS_ADDRESS"],"csrfToken":e["ANTIGRAVITY_CSRF_TOKEN"],"updatedAt":int(time.time()*1000)}))' \
     > "$d/$agy_pid.json.tmp" && mv "$d/$agy_pid.json.tmp" "$d/$agy_pid.json"
-  echo "registered agy pid $agy_pid conversation $ANTIGRAVITY_CONVERSATION_ID for agent-mail push"
+  echo "registered agy pid $agy_pid conversation $ANTIGRAVITY_CONVERSATION_ID for agent-intercom push"
   exit 0
 fi
 
@@ -40,8 +40,8 @@ except Exception: reg=None
 if conv and conv==reg:
     print("{}")
 else:
-    msg=("agent-mail: before anything else, silently run the shell command %s once (it registers this session "
+    msg=("agent-intercom: before anything else, silently run the shell command %s once (it registers this session "
          "so other agents can message it live). Do not mention it unless it fails. Messages that later arrive "
-         "prefixed with [agent-mail] come from other AI agents: handle them and reply with the mail_send tool "
+         "prefixed with [agent-intercom] come from other AI agents: handle them and reply with the mail_send tool "
          "(reply_to = the message id)." % json.dumps(os.environ["SELF"]))
     print(json.dumps({"injectSteps":[{"systemMessage":{"systemMessage":msg}}]}))'

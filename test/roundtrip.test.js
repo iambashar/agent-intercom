@@ -36,7 +36,7 @@ function client(name, dir) {
 }
 
 test('claude and codex exchange messages', async () => {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-mail-'));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-intercom-'));
   const claude = client('claude', dir);
   const codex = client('codex', dir);
   await claude.init();
@@ -63,7 +63,7 @@ test('claude and codex exchange messages', async () => {
 });
 
 test('rejects send without body', async () => {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-mail-'));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-intercom-'));
   const a = client('a', dir);
   await a.init();
   const r = await a.call('mail_send', { to: 'b' });
@@ -72,7 +72,7 @@ test('rejects send without body', async () => {
 });
 
 test('rejects recipients that would leave the mailbox', async () => {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-mail-'));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-intercom-'));
   const a = client('a', dir);
   await a.init();
   for (const to of ['..', '.', '.hidden', 'a..b']) {
@@ -85,7 +85,7 @@ test('rejects recipients that would leave the mailbox', async () => {
 });
 
 test('mail_check skips a message the push daemon has claimed', async () => {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-mail-'));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-intercom-'));
   const b = client('b', dir);
   await b.init();
   fs.writeFileSync(path.join(dir, 'b', 'inbox', '1-x.json.pushing'), JSON.stringify({ id: '1-x', from: 'a', to: 'b', body: 'mid-push' }));
@@ -94,7 +94,7 @@ test('mail_check skips a message the push daemon has claimed', async () => {
 });
 
 test('mail_peers lists agent folders only', async () => {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-mail-'));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-intercom-'));
   fs.mkdirSync(path.join(dir, 'bin'));
   const a = client('a', dir);
   await a.init();

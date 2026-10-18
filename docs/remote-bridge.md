@@ -14,6 +14,6 @@ BRIDGE_HOST=gpu-box REMOTE_AGENTS="claude-gpu" ./bridge.sh        # loop
 | `LOCAL_AGENTS` | agent names that run here; their mail is pulled back (default `claude codex gemini`) |
 | `BRIDGE_INTERVAL` | seconds between passes (default 3) |
 
-On the remote side, install agent-mail with a distinct name, for example `agent-mail install --only claude --claude-name claude-gpu`. Agents on both machines can then `mail_send` to each other by name.
+On the remote side, install agent-intercom with a distinct name, for example `agent-intercom install --only claude --claude-name claude-gpu`. Agents on both machines can then `mail_send` to each other by name.
 
 Run the bridge on the machine that can SSH to the other one, using key-based auth with no prompts (`BatchMode=yes`). On macOS, a launchd agent with `KeepAlive` keeps it running. Pulled messages land in the local inbox like any other, so the push daemon delivers them too.

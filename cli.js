@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// agent-mail CLI: install/uninstall the MCP server into Claude Code, Codex and Antigravity (agy),
+// agent-intercom CLI: install/uninstall the MCP server into Claude Code, Codex and Antigravity (agy),
 // run or install the push daemon, watch an inbox.
 const fs = require('fs');
 const os = require('os');
@@ -9,21 +9,21 @@ const { spawnSync } = require('child_process');
 const ROOT = process.env.AGENT_MAIL_DIR || path.join(os.homedir(), '.agent-mail');
 const CODEX_CONFIG = path.join(os.homedir(), '.codex', 'config.toml');
 const AGY_HOOKS = path.join(os.homedir(), '.gemini', 'config', 'hooks.json');
-const HOOK_NAME = 'agent-mail-register';
-const PUSH_LABEL = 'dev.agent-mail.pushd';
+const HOOK_NAME = 'agent-intercom-register';
+const PUSH_LABEL = 'dev.agent-intercom.pushd';
 const LAUNCHD_PLIST = path.join(os.homedir(), 'Library', 'LaunchAgents', `${PUSH_LABEL}.plist`);
-const SYSTEMD_UNIT = path.join(os.homedir(), '.config', 'systemd', 'user', 'agent-mail-pushd.service');
-const BEGIN = '# >>> agent-mail (managed) >>>';
-const END = '# <<< agent-mail (managed) <<<';
+const SYSTEMD_UNIT = path.join(os.homedir(), '.config', 'systemd', 'user', 'agent-intercom-pushd.service');
+const BEGIN = '# >>> agent-intercom (managed) >>>';
+const END = '# <<< agent-intercom (managed) <<<';
 const [cmd, ...rest] = process.argv.slice(2);
 const flag = (f) => rest.includes(f);
 const opt = (f, d) => (rest.includes(f) ? rest[rest.indexOf(f) + 1] : d);
 
-// `npx @basharmk/agent-mail serve` is the stable command; --local pins this checkout instead.
+// `npx agent-intercom serve` is the stable command; --local pins this checkout instead.
 function serverCommand() {
   return flag('--local')
     ? { command: 'node', args: [path.join(__dirname, 'server.js')] }
-    : { command: 'npx', args: ['-y', '@basharmk/agent-mail', 'serve'] };
+    : { command: 'npx', args: ['-y', 'agent-intercom', 'serve'] };
 }
 
 const has = (bin) => spawnSync('which', [bin]).status === 0;
@@ -31,8 +31,8 @@ const has = (bin) => spawnSync('which', [bin]).status === 0;
 function installClaude(name) {
   if (!has('claude')) return console.log('claude: CLI not found, skipped');
   const { command, args } = serverCommand();
-  spawnSync('claude', ['mcp', 'remove', '-s', 'user', 'agent-mail'], { stdio: 'ignore' });
-  const r = spawnSync('claude', ['mcp', 'add', '-s', 'user', 'agent-mail', '-e', `AGENT_NAME=${name}`, '--', command, ...args], { encoding: 'utf8' });
+  spawnSync('claude', ['mcp', 'remove', '-s', 'user', 'agent-intercom'], { stdio: 'ignore' });
+  const r = spawnSync('claude', ['mcp', 'add', '-s', 'user', 'agent-intercom', '-e', `AGENT_NAME=${name}`, '--', command, ...args], { encoding: 'utf8' });
   console.log(r.status === 0 ? `claude: registered as "${name}" (user scope). Restart Claude Code.` : `claude: failed\n${r.stderr}`);
 }
 
@@ -46,17 +46,17 @@ function installCodex(name) {
   const { command, args } = serverCommand();
   const cur = fs.existsSync(CODEX_CONFIG) ? fs.readFileSync(CODEX_CONFIG, 'utf8') : '';
   if (/\[mcp_servers\.agent-mail\]/.test(stripBlock(cur))) {
-    return console.log('codex: an unmanaged [mcp_servers.agent-mail] block already exists, left alone');
+    return console.log('codex: an unmanaged [mcp_servers.agent-intercom] block already exists, left alone');
   }
   if (cur) fs.copyFileSync(CODEX_CONFIG, `${CODEX_CONFIG}.bak-agentmail`);
   const block = [
     BEGIN,
-    '[mcp_servers.agent-mail]',
+    '[mcp_servers.agent-intercom]',
     `command = ${JSON.stringify(command)}`,
     `args = ${JSON.stringify(args)}`,
     'tool_timeout_sec = 330',
     '',
-    '[mcp_servers.agent-mail.env]',
+    '[mcp_servers.agent-intercom.env]',
     `AGENT_NAME = ${JSON.stringify(name)}`,
     END,
     '',
@@ -68,8 +68,8 @@ function installCodex(name) {
 function installGemini(name) {
   if (!has('agy')) return console.log('gemini: agy (Antigravity CLI) not found, skipped');
   const { command, args } = serverCommand();
-  spawnSync('agy', ['mcp', 'remove', 'agent-mail'], { stdio: 'ignore' });
-  const r = spawnSync('agy', ['mcp', 'add', '-e', `AGENT_NAME=${name}`, 'agent-mail', '--', command, ...args], { encoding: 'utf8' });
+  spawnSync('agy', ['mcp', 'remove', 'agent-intercom'], { stdio: 'ignore' });
+  const r = spawnSync('agy', ['mcp', 'add', '-e', `AGENT_NAME=${name}`, 'agent-intercom', '--', command, ...args], { encoding: 'utf8' });
   if (r.status !== 0) return console.log(`gemini: failed\n${r.stderr}`);
   // The hook lets each live agy session register itself so the push daemon can reach it. It is copied into the
   // mailbox because __dirname may be npx's cache, which npm can delete at any time.
@@ -86,7 +86,7 @@ function installGemini(name) {
 }
 
 function uninstallGemini() {
-  if (has('agy')) spawnSync('agy', ['mcp', 'remove', 'agent-mail'], { stdio: 'inherit' });
+  if (has('agy')) spawnSync('agy', ['mcp', 'remove', 'agent-intercom'], { stdio: 'inherit' });
   if (!fs.existsSync(AGY_HOOKS)) return;
   const hooks = JSON.parse(fs.readFileSync(AGY_HOOKS, 'utf8'));
   if (!(HOOK_NAME in hooks)) return;
@@ -98,14 +98,14 @@ function uninstallGemini() {
 // The push daemon has to outlive npx's cache, so it runs from a stable checkout or global install.
 function pushInstall() {
   if (__dirname.includes(`${path.sep}_npx${path.sep}`)) {
-    console.error('push: run this from a global install (npm i -g @basharmk/agent-mail) or a git checkout, not npx');
+    console.error('push: run this from a global install (npm i -g agent-intercom) or a git checkout, not npx');
     process.exit(1);
   }
   const node = process.execPath;
   const script = path.join(__dirname, 'pushd.js');
   const envPath = [path.dirname(node), path.join(os.homedir(), '.local', 'bin'), '/opt/homebrew/bin', '/usr/local/bin', '/usr/bin', '/bin'].join(':');
   if (process.platform === 'darwin') {
-    const log = path.join(os.homedir(), 'Library', 'Logs', 'agent-mail-pushd.log');
+    const log = path.join(os.homedir(), 'Library', 'Logs', 'agent-intercom-pushd.log');
     fs.mkdirSync(path.dirname(LAUNCHD_PLIST), { recursive: true });
     fs.writeFileSync(LAUNCHD_PLIST, `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -126,7 +126,7 @@ function pushInstall() {
   } else if (process.platform === 'linux') {
     fs.mkdirSync(path.dirname(SYSTEMD_UNIT), { recursive: true });
     fs.writeFileSync(SYSTEMD_UNIT, `[Unit]
-Description=agent-mail push daemon
+Description=agent-intercom push daemon
 
 [Service]
 ExecStart=${node} ${script}
@@ -136,9 +136,9 @@ Restart=always
 [Install]
 WantedBy=default.target
 `);
-    const r = spawnSync('systemctl', ['--user', 'enable', '--now', 'agent-mail-pushd.service'], { encoding: 'utf8' });
-    console.log(r.status === 0 ? 'push: daemon running (systemd --user agent-mail-pushd)' : `push: systemctl failed\n${r.stderr}`);
-  } else console.log(`push: no service manager support for ${process.platform}; run "agent-mail push run" yourself`);
+    const r = spawnSync('systemctl', ['--user', 'enable', '--now', 'agent-intercom-pushd.service'], { encoding: 'utf8' });
+    console.log(r.status === 0 ? 'push: daemon running (systemd --user agent-intercom-pushd)' : `push: systemctl failed\n${r.stderr}`);
+  } else console.log(`push: no service manager support for ${process.platform}; run "agent-intercom push run" yourself`);
 }
 
 function pushUninstall() {
@@ -148,20 +148,20 @@ function pushUninstall() {
     console.log('push: launchd daemon removed');
   }
   if (fs.existsSync(SYSTEMD_UNIT)) {
-    spawnSync('systemctl', ['--user', 'disable', '--now', 'agent-mail-pushd.service'], { stdio: 'ignore' });
+    spawnSync('systemctl', ['--user', 'disable', '--now', 'agent-intercom-pushd.service'], { stdio: 'ignore' });
     fs.unlinkSync(SYSTEMD_UNIT);
     console.log('push: systemd unit removed');
   }
 }
 
 function uninstall() {
-  if (has('claude')) spawnSync('claude', ['mcp', 'remove', '-s', 'user', 'agent-mail'], { stdio: 'inherit' });
+  if (has('claude')) spawnSync('claude', ['mcp', 'remove', '-s', 'user', 'agent-intercom'], { stdio: 'inherit' });
   if (fs.existsSync(CODEX_CONFIG)) {
     const cur = fs.readFileSync(CODEX_CONFIG, 'utf8');
     if (cur.includes(BEGIN)) {
       fs.writeFileSync(CODEX_CONFIG, stripBlock(cur));
       console.log('codex: removed managed block');
-    } else console.log('codex: no managed block found (remove [mcp_servers.agent-mail] by hand if you added it yourself)');
+    } else console.log('codex: no managed block found (remove [mcp_servers.agent-intercom] by hand if you added it yourself)');
   }
   uninstallGemini();
   pushUninstall();
@@ -211,7 +211,7 @@ switch (cmd) {
     if (rest[0] === 'install') pushInstall();
     else if (rest[0] === 'uninstall') pushUninstall();
     else if (rest[0] === 'run') require('./pushd.js').main();
-    else { console.error('usage: agent-mail push install|uninstall|run'); process.exit(1); }
+    else { console.error('usage: agent-intercom push install|uninstall|run'); process.exit(1); }
     break;
   case 'uninstall':
     uninstall();
@@ -220,11 +220,11 @@ switch (cmd) {
     status();
     break;
   case 'watch':
-    if (!rest[0]) { console.error('usage: agent-mail watch <name>'); process.exit(1); }
+    if (!rest[0]) { console.error('usage: agent-intercom watch <name>'); process.exit(1); }
     watch(rest[0]);
     break;
   default:
-    console.log(`agent-mail <command>
+    console.log(`agent-intercom <command>
 
   install [--only claude|codex|gemini] [--claude-name N] [--codex-name N] [--gemini-name N] [--local] [--push]
   uninstall        remove the MCP entries, the agy hook and the push daemon

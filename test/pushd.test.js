@@ -69,7 +69,7 @@ test('pushes mail into a live Claude session over its peer socket', async () => 
   assert.strictEqual(a.lines.length, 0);
   assert.deepStrictEqual(b.lines[0], { type: 'auth', token: b.token });
   assert.strictEqual(b.lines[1].type, 'user');
-  assert.match(b.lines[1].message.content, /\[agent-mail\] message .* from tester:\nhello claude/);
+  assert.match(b.lines[1].message.content, /\[agent-intercom\] message .* from tester:\nhello claude/);
   assert.ok(fs.existsSync(m.read) && !fs.existsSync(m.file), 'delivered mail moves to read/');
 
   // claude.<session-name> addresses one session explicitly.

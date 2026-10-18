@@ -1,4 +1,4 @@
-# agent-mail
+# agent-intercom
 
 **Let Claude Code, Codex CLI and Antigravity (Gemini) message each other.**
 
@@ -22,7 +22,7 @@ Each client launches its own copy of the server. The copies share a folder, and 
 ## Install
 
 ```sh
-npx @basharmk/agent-mail install
+npx agent-intercom install
 ```
 
 This registers the server with every CLI it finds, then you restart them:
@@ -31,7 +31,7 @@ This registers the server with every CLI it finds, then you restart them:
 - **Codex:** a managed block in `~/.codex/config.toml` (backed up first).
 - **Antigravity CLI (`agy`):** `agy mcp add`, plus a session hook in `~/.gemini/config/hooks.json` used by push.
 
-Use `--only claude|codex|gemini` to do one, and `--local` to pin a git checkout instead of npx. Remove everything with `npx @basharmk/agent-mail uninstall`.
+Use `--only claude|codex|gemini` to do one, and `--local` to pin a git checkout instead of npx. Remove everything with `npx agent-intercom uninstall`.
 
 > The old `gemini` CLI no longer accepts personal Google AI Pro sign-ins; Google moved those users to the Antigravity CLI (`agy`). Its agent is called `gemini` here by default.
 
@@ -58,8 +58,8 @@ MCP servers are passive: a message sits in the inbox until the agent calls `mail
 | agy | `agy agentapi send-message` into the registered conversation |
 
 ```sh
-npm i -g @basharmk/agent-mail          # the daemon needs a stable path, so not npx
-agent-mail install --push    # or: agent-mail push install
+npm i -g agent-intercom          # the daemon needs a stable path, so not npx
+agent-intercom install --push    # or: agent-intercom push install
 ```
 
 It runs as a launchd agent on macOS or a `systemd --user` service on Linux. Address one session with `claude.<session-name>`, `codex.<thread-id-prefix>` or `gemini.<conversation-prefix>`. Otherwise the most recently active session gets it, or the one named in `~/.agent-mail/routes.json`:
@@ -74,7 +74,7 @@ If no session is open, the message stays in the inbox and `mail_check` still wor
 
 ### Without the daemon
 
-- **Claude Code:** [docs/claude-monitor.md](docs/claude-monitor.md). `agent-mail watch claude` under the Monitor tool wakes the session when mail arrives.
+- **Claude Code:** [docs/claude-monitor.md](docs/claude-monitor.md). `agent-intercom watch claude` under the Monitor tool wakes the session when mail arrives.
 - **Codex:** [docs/codex-listen.md](docs/codex-listen.md). A listener prompt that loops on `mail_check(wait_seconds=300)`.
 
 ## More than two agents
@@ -82,7 +82,7 @@ If no session is open, the message stays in the inbox and `mail_check` still wor
 Names are just `AGENT_NAME`. Give each session its own, for example `claude-api` and `claude-web`:
 
 ```sh
-npx @basharmk/agent-mail install --only claude --claude-name claude-api
+npx agent-intercom install --only claude --claude-name claude-api
 ```
 
 ## Another machine
@@ -92,14 +92,14 @@ Agents on a machine with no shared filesystem, such as a GPU server or HPC clust
 ## CLI
 
 ```
-agent-mail install [--only claude|codex|gemini] [--claude-name N] [--codex-name N] [--gemini-name N] [--local] [--push]
-agent-mail uninstall        MCP entries, agy hook and push daemon
-agent-mail push install     push daemon as a login service
-agent-mail push uninstall
-agent-mail push run         push daemon in the foreground
-agent-mail status           unread/read counts per agent
-agent-mail watch <name>     one line per new message, without consuming it
-agent-mail serve            the MCP server on stdio
+agent-intercom install [--only claude|codex|gemini] [--claude-name N] [--codex-name N] [--gemini-name N] [--local] [--push]
+agent-intercom uninstall        MCP entries, agy hook and push daemon
+agent-intercom push install     push daemon as a login service
+agent-intercom push uninstall
+agent-intercom push run         push daemon in the foreground
+agent-intercom status           unread/read counts per agent
+agent-intercom watch <name>     one line per new message, without consuming it
+agent-intercom serve            the MCP server on stdio
 ```
 
 ## Security
@@ -107,9 +107,9 @@ agent-mail serve            the MCP server on stdio
 This is a local mailbox with no authentication. Any process running as you can write to `~/.agent-mail/*/inbox`, and **an agent treats a message as input to act on**. With push enabled, that input arrives in your open sessions without you typing anything.
 
 - Treat inbox contents as untrusted text. Do not let one agent auto-approve destructive actions because a message told it to.
-- Pushed messages are labeled `[agent-mail] message <id> from <sender>`. Claude Code also marks them as coming from another session, not from you.
+- Pushed messages are labeled `[agent-intercom] message <id> from <sender>`. Claude Code also marks them as coming from another session, not from you.
 - Push reads tokens that only your user can read (`~/.claude/sessions/*.key`, the agy session token) and only talks to local sockets. It never sends anything off the machine.
-- Claude Code's session socket accepts any process running as your user (it checks the connecting process, not just the token), so agent-mail doesn't open anything that wasn't already reachable.
+- Claude Code's session socket accepts any process running as your user (it checks the connecting process, not just the token), so agent-intercom doesn't open anything that wasn't already reachable.
 
 Set `AGENT_MAIL_DIR` to move the mailbox, for example to a project folder.
 
