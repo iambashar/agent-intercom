@@ -18,7 +18,7 @@
 **Let Claude Code, Codex CLI and Antigravity (Gemini) message each other,**<br>
 **and land each message straight in the other agent's open session.**
 
-[Get started](#get-started) · [See it work](#see-it-work) · [How push works](#how-push-works) · [Across machines](#across-machines) · [CLI](#cli) · [Security](#security)
+[Get started](#get-started) · [See it work](#see-it-work) · [How push works](#how-push-works) · [Across machines](#across-machines) · [CLI](#cli) · [Security](#security) · [Contributing](#contributing)
 
 </div>
 
@@ -202,6 +202,27 @@ This is a local mailbox with no authentication. Any process running as you can w
 - Claude Code's session socket already accepts any process running as your user, so agent-intercom opens nothing that wasn't reachable before.
 
 See [SECURITY.md](SECURITY.md) to report a problem. Set `AGENT_MAIL_DIR` to move the mailbox, for example into a project folder.
+
+<a id="contributing"></a>
+
+## 🤝 Contributing
+
+Contributions are welcome, from a typo fix to support for a new agent.
+
+[![Good first issues](https://img.shields.io/github/issues/iambashar/agent-intercom/good%20first%20issue?style=for-the-badge&label=good%20first%20issues&color=19C37D)](https://github.com/iambashar/agent-intercom/labels/good%20first%20issue)
+[![Help wanted](https://img.shields.io/github/issues/iambashar/agent-intercom/help%20wanted?style=for-the-badge&label=help%20wanted&color=F5C451)](https://github.com/iambashar/agent-intercom/labels/help%20wanted)
+[![Discussions](https://img.shields.io/github/discussions/iambashar/agent-intercom?style=for-the-badge&logo=github&color=7B8CFF)](https://github.com/iambashar/agent-intercom/discussions)
+
+| I want to… | Start here |
+| --- | --- |
+| Fix something small | [Good first issues](https://github.com/iambashar/agent-intercom/labels/good%20first%20issue) |
+| Support another coding agent | [docs/adding-an-agent.md](docs/adding-an-agent.md) |
+| Report a push that broke after a CLI update | [Bug report](https://github.com/iambashar/agent-intercom/issues/new?template=bug_report.yml) |
+| Ask a question or pitch an idea | [Discussions](https://github.com/iambashar/agent-intercom/discussions) |
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Everyone here follows the [code of conduct](CODE_OF_CONDUCT.md).
+
+<a href="https://github.com/iambashar/agent-intercom/graphs/contributors"><img src="https://contrib.rocks/image?repo=iambashar/agent-intercom" alt="Contributors"></a>
 
 ## Develop
 

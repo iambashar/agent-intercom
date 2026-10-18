@@ -4,6 +4,9 @@ All notable changes to this project. Versions follow [semver](https://semver.org
 
 ## [Unreleased]
 
+### Added
+- Contributor guide for new agents (`docs/adding-an-agent.md`), code of conduct, Dependabot for CI actions, and a Contributing section in the README.
+
 ## [0.2.2] - 2026-10-18
 
 No code changes; the package now ships the new README and the changelog.

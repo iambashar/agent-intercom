@@ -2,6 +2,15 @@
 
 Thanks for helping. agent-intercom stays small on purpose: zero runtime dependencies, Node 20+, plain files.
 
+## Ways to help
+
+- **Pick up a starter issue.** [Good first issues](https://github.com/iambashar/agent-intercom/labels/good%20first%20issue) are small and come with pointers to the code. [Help wanted](https://github.com/iambashar/agent-intercom/labels/help%20wanted) issues are bigger.
+- **Add an agent.** Support for another CLI is the most useful contribution. Follow [docs/adding-an-agent.md](docs/adding-an-agent.md).
+- **Report a broken push.** CLI updates can change the internals push relies on. Say which CLI and version broke it.
+- **Ask or suggest** in [Discussions](https://github.com/iambashar/agent-intercom/discussions).
+
+Comment on an issue before you start, so two people don't build the same thing.
+
 ## Setup
 
 ```bash
@@ -27,6 +36,13 @@ node cli.js push run      # push daemon in the foreground, logs to the terminal
 | `agy-register.sh` | Antigravity session hook and self-registration |
 | `bridge.sh` | rsync-over-SSH bridge between machines |
 | `scripts/build-assets.py` | Rebuilds the SVG artwork in `docs/assets/` |
+
+## Pull requests
+
+1. Fork, then branch from `main`.
+2. Keep each PR to one change, with a test.
+3. `npm test` must pass. CI runs it on macOS and Linux with Node 20 and 22.
+4. Describe how you tested it, especially against a live session if push delivery changed.
 
 ## Guidelines
 
