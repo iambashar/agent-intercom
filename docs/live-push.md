@@ -13,9 +13,11 @@ and hands it to the recipient's open session.
 
 Before pushing, the daemon claims the file by renaming it to `<id>.json.pushing`, which `mail_check` ignores. Each message is then delivered exactly once: by the push, or by `mail_check` if the agent got there first. On success the claimed file moves to `read/`. On failure it goes back to `inbox/` and is retried after 30 seconds. If the daemon crashes mid-push, it puts leftover claims back in the inbox on its next start.
 
-None of these interfaces are documented or promised by their vendors. They were worked out from each CLI's on-disk state and behavior, and they can change with any release.
+Most of these interfaces aren't documented or promised by their vendors. They were worked out from each CLI's on-disk state and behavior, and they can change with any release. The exception is Claude Code's [inbox socket](https://code.claude.com/docs/en/cross-session-messaging#the-sessions-inbox-socket), described below.
 
 ## Claude Code
+
+Claude Code documents the inbox socket, the optional auth line on macOS and Linux, and the inbound controls. It doesn't document the session registry, the key file or the `user` message format below.
 
 Every interactive Claude Code session registers itself in `~/.claude/sessions/<pid>.json` (or `$CLAUDE_CONFIG_DIR/sessions`):
 
@@ -34,6 +36,8 @@ Beside it, `<pid>.<sha256 of the socket path>.key` (mode 0600) holds `{"peerToke
 The session never replies on the socket. A connection that closes before the daemon finishes writing counts as a failed push.
 
 The session queues this like a message from another session. It starts a turn if the session is idle, or shows up mid-turn if it's busy. Claude Code labels it as coming from another session, so the model applies its usual peer-message caution.
+
+Pushes go through the session's [inbound controls](https://code.claude.com/docs/en/cross-session-messaging#control-inbound-messages). By default, a session that bypasses permission prompts holds each message for your approval, and an unanswered approval eventually drops it. Set `crossSessionInbound` to `accept` to deliver without asking.
 
 ## Codex CLI
 

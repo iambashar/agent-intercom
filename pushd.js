@@ -8,7 +8,7 @@
 // A message is claimed (renamed to <id>.json.pushing, which mail_check ignores) before it is pushed, so it is
 // delivered once: either by the push or by mail_check, never both.
 // Default session per agent: <mailbox>/routes.json, e.g. {"claude": "my-session"}; else most recently active.
-// These are undocumented internals of each CLI, so a CLI update can break a route; failures fall back to the inbox.
+// Apart from Claude Code's inbox socket, these are undocumented CLI internals, so an update can break a route; failures fall back to the inbox.
 const fs = require('fs');
 const os = require('os');
 const net = require('net');

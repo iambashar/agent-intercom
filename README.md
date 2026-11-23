@@ -145,7 +145,7 @@ sequenceDiagram
   ```
 
 > [!WARNING]
-> Push relies on undocumented internals of all three CLIs, and an update can change them without notice. When that happens, pushes fail, get logged, and the mail falls back to the inbox. Protocol details: [docs/live-push.md](docs/live-push.md).
+> The Codex and Antigravity routes rely on undocumented internals. Claude Code documents its [inbox socket](https://code.claude.com/docs/en/cross-session-messaging#the-sessions-inbox-socket), but not how the daemon finds other sessions' sockets or the message format it sends. An update can change any of these without notice. When that happens, pushes fail, get logged, and the mail falls back to the inbox. Claude Code sessions that bypass permission prompts hold pushed messages for your approval by default. Protocol details: [docs/live-push.md](docs/live-push.md).
 
 <details>
 <summary><b>Without the push daemon</b></summary>
