@@ -39,9 +39,11 @@ The session queues this like a message from another session. It starts a turn if
 
 By default, the Codex TUI runs on a shared local app-server daemon. `codex --no-daemon` opts out, and those sessions can't be reached. The daemon listens on `/tmp/codex-daemon-<uid>/<hash>` and speaks JSON-RPC over a WebSocket on that Unix socket. `codex-ws.js` is a dependency-free client for it. The daemon:
 
-1. calls `initialize`, then sends `initialized`;
-2. calls `thread/loaded/list` and reads each thread with `thread/read` to find the target and any turn in progress;
-3. calls `turn/start {threadId, input:[{type:"text", text}]}`, or `turn/steer {threadId, expectedTurnId, input}` when a turn is already running.
+1. connects to the socket that has a `<hash>.lock` file next to it, and tries the others if that fails (helper processes can leave sockets there that close every connection);
+2. calls `initialize`, then sends `initialized`;
+3. calls `thread/loaded/list` and reads each thread's metadata with `thread/read {threadId}` to find the target. `thread.status` says whether a turn is running;
+4. for a busy thread, looks up the running turn with `thread/turns/list`, or with `thread/read {includeTurns: true}` on older daemons, and calls `turn/steer {threadId, expectedTurnId, input}`;
+5. otherwise calls `turn/start {threadId, input:[{type:"text", text}]}`. This is also the fallback when the running turn can't be found: some threads reject turn listing with `list_turns is not supported yet`, and Codex 0.171 treats `turn/start` on a busy thread as steering.
 
 The new turn shows up live in the open TUI.
 

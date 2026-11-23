@@ -74,15 +74,29 @@ function connect(sock) {
   });
 }
 
-function daemonSock() {
+// Candidate sockets, most likely first. The app-server's socket has a <name>.lock next to it. Other sockets in the
+// directory can belong to helpers (Codex 0.171 runs `app-server daemon pid-update-loop`) that close every connection.
+function daemonSocks() {
   const d = process.env.CODEX_DAEMON_DIR || path.join('/tmp', `codex-daemon-${process.getuid()}`);
-  const f = fs.readdirSync(d).find((x) => !x.endsWith('.lock'));
-  if (!f) throw new Error(`no codex app-server daemon socket in ${d}`);
-  return path.join(d, f);
+  const names = fs.readdirSync(d);
+  const socks = names.filter((x) => !x.endsWith('.lock'));
+  if (!socks.length) throw new Error(`no codex app-server daemon socket in ${d}`);
+  const locked = (x) => (names.includes(`${x}.lock`) ? 1 : 0);
+  return socks.sort((a, b) => locked(b) - locked(a)).map((x) => path.join(d, x));
 }
 
+const daemonSock = () => daemonSocks()[0];
+
 // One JSON-RPC session. Every call settles: with the reply, on a timeout, or when the connection drops.
-async function session({ sock = daemonSock(), timeoutMs = 15000 } = {}) {
+// Without an explicit sock, each candidate socket is tried until one completes initialize.
+async function session({ sock, timeoutMs = 15000 } = {}) {
+  if (!sock) {
+    let err;
+    for (const s of daemonSocks()) {
+      try { return await session({ sock: s, timeoutMs }); } catch (e) { err = e; }
+    }
+    throw err;
+  }
   const ws = await connect(sock);
   let id = 0;
   const pend = new Map();
@@ -101,4 +115,4 @@ async function session({ sock = daemonSock(), timeoutMs = 15000 } = {}) {
   return { call, close: () => ws.close() };
 }
 
-module.exports = { connect, daemonSock, session };
+module.exports = { connect, daemonSock, daemonSocks, session };

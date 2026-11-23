@@ -70,6 +70,14 @@ function claudePush(sess, m) {
 }
 
 // ---- Codex: app-server daemon ----
+// Id of the thread's running turn, or null. Newer daemons page turns with thread/turns/list, older ones return
+// them from thread/read includeTurns, and both fail with "list_turns is not supported yet" for some threads.
+async function codexActiveTurn(s, threadId) {
+  const r = await s.call('thread/turns/list', { threadId, limit: 1 }); // newest first
+  const turns = r.result?.data || (await s.call('thread/read', { threadId, includeTurns: true })).result?.thread?.turns;
+  return (turns || []).find((x) => x.status === 'inProgress')?.id || null;
+}
+
 // Returns a target with push()/close(), or null when no loaded thread matches.
 async function codexTarget(want) {
   const { session } = require('./codex-ws.js');
@@ -79,7 +87,10 @@ async function codexTarget(want) {
     const loaded = (await s.call('thread/loaded/list', {})).result?.data || [];
     const threads = [];
     for (const id of loaded) {
-      const t = (await s.call('thread/read', { threadId: id, includeTurns: true })).result?.thread;
+      // Metadata only: includeTurns fails on some threads and hydrates the whole history on the rest.
+      const r = await s.call('thread/read', { threadId: id });
+      if (r.error) { log(`codex thread/read ${id} failed: ${r.error.message}`); continue; }
+      const t = r.result?.thread;
       if (t && !t.ephemeral) threads.push({ ...t, t: t.updatedAt || 0 });
     }
     const th = pick(threads, want, (t, w) => t.id.startsWith(w));
@@ -88,12 +99,18 @@ async function codexTarget(want) {
       close: s.close,
       async push(m) {
         const input = [{ type: 'text', text: render(m) }];
-        const active = (th.turns || []).find((x) => x.status === 'inProgress');
-        const r = active
-          ? await s.call('turn/steer', { threadId: th.id, expectedTurnId: active.id, input })
-          : await s.call('turn/start', { threadId: th.id, input });
-        if (r.error) throw new Error(`codex ${active ? 'turn/steer' : 'turn/start'}: ${r.error.message}`);
-        return `codex thread ${th.id} (${active ? 'steered running turn' : 'new turn'})`;
+        // Old daemons have no thread.status, so look for a running turn unless the thread is known to be idle.
+        const turnId = th.status?.type === 'idle' ? null : await codexActiveTurn(s, th.id);
+        if (turnId) {
+          const r = await s.call('turn/steer', { threadId: th.id, expectedTurnId: turnId, input });
+          if (!r.error) return `codex thread ${th.id} (steered running turn)`;
+          log(`codex turn/steer ${th.id} failed, trying turn/start: ${r.error.message}`); // e.g. the turn just ended
+        }
+        // Codex 0.171 also steers through turn/start when a turn is running, which covers threads whose turns
+        // can't be listed.
+        const r = await s.call('turn/start', { threadId: th.id, input });
+        if (r.error) throw new Error(`codex turn/start: ${r.error.message}`);
+        return `codex thread ${th.id} (${th.status?.type === 'active' ? 'turn/start on a busy thread' : 'new turn'})`;
       },
     };
   } catch (e) { s.close(); throw e; }

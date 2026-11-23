@@ -4,6 +4,10 @@ All notable changes to this project. Versions follow [semver](https://semver.org
 
 ## [Unreleased]
 
+### Fixed
+- Codex push works again on Codex CLI 0.163 and newer ([#12](https://github.com/iambashar/agent-intercom/issues/12), reported by christineecker). The daemon read threads with `thread/read {includeTurns: true}`, which now fails on some threads with `list_turns is not supported yet`, so every push ended in "no live session". It now reads metadata only, uses `thread.status` to tell idle from busy, and finds the running turn through `thread/turns/list` (or `includeTurns` on older daemons) only when it needs to steer. Failed `thread/read` calls are logged.
+- Codex push no longer gives up when the daemon directory holds a stale socket. It tries the socket with the `.lock` file first, then the others.
+
 ## [0.2.5] - 2026-10-18
 
 ### Changed

@@ -23,6 +23,7 @@ process.env.CLAUDE_CONFIG_DIR = CLAUDE;
 process.env.AGY_BIN = AGY;
 process.env.CODEX_DAEMON_DIR = path.join(tmp, 'no-codex-daemon');
 const { deliver, scan, recoverClaims } = require('../pushd.js');
+const { codexDaemon } = require('./fake-codex.js');
 
 function drop(to, body) {
   const id = `${Date.now()}-${crypto.randomBytes(3).toString('hex')}`;
@@ -123,6 +124,112 @@ test('agentapi output is parsed as JSON, not pattern-matched', async () => {
   assert.ok(fs.existsSync(bad.file));
   fs.rmSync(AGY_OUT);
   fs.rmSync(sessions, { recursive: true });
+});
+
+// ---- Codex ----
+// Some threads reject turn listing on Codex 0.163+ (issue #12).
+const LIST_TURNS = { error: { code: -32601, message: 'list_turns is not supported yet' } };
+const thread = (id, extra) => ({ result: { thread: { id, ephemeral: false, updatedAt: 1, turns: [], ...extra } } });
+
+// Runs `fn` with a fake codex daemon as the only live socket in CODEX_DAEMON_DIR, next to a stale socket that
+// drops every connection (listed first, but without the lock file the live socket has).
+let codexN = 0;
+async function withCodex(handlers, fn) {
+  const dir = path.join(tmp, `codex${++codexN}`);
+  fs.mkdirSync(dir);
+  const stale = net.createServer((c) => c.destroy()).listen(path.join(dir, 'aaa'));
+  const d = codexDaemon(path.join(dir, 'zzz'), handlers);
+  fs.writeFileSync(path.join(dir, 'zzz.lock'), '');
+  const before = process.env.CODEX_DAEMON_DIR;
+  process.env.CODEX_DAEMON_DIR = dir;
+  try { await fn(d.calls); } finally {
+    process.env.CODEX_DAEMON_DIR = before;
+    stale.close();
+    d.close();
+  }
+}
+const called = (calls, method) => calls.filter((c) => c.method === method).map((c) => c.params);
+
+test('pushes into an idle Codex thread whose turns cannot be listed (#12)', async () => {
+  await withCodex({
+    'thread/loaded/list': () => ({ result: { data: ['thr-1'] } }),
+    'thread/read': (p) => (p.includeTurns ? LIST_TURNS : thread('thr-1', { status: { type: 'idle' } })),
+    'thread/turns/list': () => LIST_TURNS,
+    'turn/start': () => ({ result: { turn: { id: 'turn-1', status: 'inProgress' } } }),
+  }, async (calls) => {
+    const m = drop('codex', 'hello codex');
+    await deliver('codex', m.file);
+    const [start] = called(calls, 'turn/start');
+    assert.strictEqual(start.threadId, 'thr-1');
+    assert.match(start.input[0].text, /from tester:\nhello codex/);
+    assert.strictEqual(called(calls, 'turn/steer').length, 0);
+    assert.ok(!called(calls, 'thread/read').some((p) => p.includeTurns), 'idle thread: no turn lookup');
+    assert.ok(fs.existsSync(m.read));
+  });
+});
+
+test('steers the running turn of a busy Codex thread', async () => {
+  await withCodex({
+    'thread/loaded/list': () => ({ result: { data: ['thr-2'] } }),
+    'thread/read': () => thread('thr-2', { status: { type: 'active', activeFlags: [] } }),
+    'thread/turns/list': () => ({ result: { data: [{ id: 'turn-7', status: 'inProgress' }] } }),
+    'turn/steer': () => ({ result: { turnId: 'turn-7' } }),
+  }, async (calls) => {
+    const m = drop('codex', 'mid-turn note');
+    await deliver('codex', m.file);
+    assert.deepStrictEqual(called(calls, 'turn/steer').map((p) => [p.threadId, p.expectedTurnId]), [['thr-2', 'turn-7']]);
+    assert.strictEqual(called(calls, 'turn/start').length, 0);
+    assert.ok(fs.existsSync(m.read));
+  });
+});
+
+test('finds the running turn with includeTurns on daemons without status or thread/turns/list', async () => {
+  await withCodex({
+    'thread/loaded/list': () => ({ result: { data: ['thr-3'] } }),
+    'thread/read': (p) => thread('thr-3', p.includeTurns
+      ? { turns: [{ id: 'turn-3', status: 'completed' }, { id: 'turn-4', status: 'inProgress' }] } : {}),
+    'turn/steer': () => ({ result: { turnId: 'turn-4' } }),
+  }, async (calls) => {
+    const m = drop('codex', 'old daemon');
+    await deliver('codex', m.file);
+    assert.deepStrictEqual(called(calls, 'turn/steer').map((p) => p.expectedTurnId), ['turn-4']);
+    assert.ok(fs.existsSync(m.read));
+  });
+});
+
+test('falls back to turn/start when the turn ends before it can be steered', async () => {
+  await withCodex({
+    'thread/loaded/list': () => ({ result: { data: ['thr-4'] } }),
+    'thread/read': () => thread('thr-4', { status: { type: 'active', activeFlags: [] } }),
+    'thread/turns/list': () => ({ result: { data: [{ id: 'turn-9', status: 'inProgress' }] } }),
+    'turn/steer': () => ({ error: { code: -32600, message: 'expected active turn id `turn-9` but found none' } }),
+    'turn/start': () => ({ result: { turn: { id: 'turn-10', status: 'inProgress' } } }),
+  }, async (calls) => {
+    const m = drop('codex', 'just missed it');
+    await deliver('codex', m.file);
+    assert.strictEqual(called(calls, 'turn/steer').length, 1);
+    assert.strictEqual(called(calls, 'turn/start').length, 1);
+    assert.ok(fs.existsSync(m.read));
+  });
+});
+
+test('logs a Codex thread it cannot read and pushes to the next one', async () => {
+  const logged = [];
+  const orig = console.log;
+  console.log = (...a) => logged.push(a.join(' '));
+  try {
+    await withCodex({
+      'thread/loaded/list': () => ({ result: { data: ['thr-bad', 'thr-ok'] } }),
+      'thread/read': (p) => (p.threadId === 'thr-bad' ? { error: { code: -32603, message: 'boom' } } : thread('thr-ok', { status: { type: 'idle' } })),
+      'turn/start': () => ({ result: { turn: { id: 'turn-1', status: 'inProgress' } } }),
+    }, async (calls) => {
+      const m = drop('codex', 'to the readable one');
+      await deliver('codex', m.file);
+      assert.deepStrictEqual(called(calls, 'turn/start').map((p) => p.threadId), ['thr-ok']);
+      assert.ok(fs.existsSync(m.read));
+    });
+  } finally { console.log = orig; }
+  assert.ok(logged.some((l) => /codex thread\/read thr-bad failed: boom/.test(l)), logged.join('\n'));
 });
 
 test('claims left by a crash are put back in the inbox', () => {
